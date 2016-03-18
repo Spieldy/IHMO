@@ -12,3 +12,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_btn_add_advert_clicked()
+{
+    Advert *advert = new Advert(this);
+    advert->exec();
+}
