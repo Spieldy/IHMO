@@ -1,25 +1,45 @@
 #ifndef ADVERT_H
 #define ADVERT_H
 
-#include <QtWidgets>
-#include "ui_advert.h"
+#include <QString>
 
-namespace Ui {
-class Advert;
-}
+using namespace std;
 
-class Advert : public QDialog
+class Advert
 {
-    Q_OBJECT
+    QString type;
+    QString num;
+    QString street;
+    QString city;
+    QString zip;
+    QString description;
+    int size;
+    int rooms;
+    int price;
+    int id;
 public:
-    explicit Advert(QMainWindow *parent = 0);
-    ~Advert();
-
-    Ui::Dialog *ui;
-
-signals:
-
-public slots:
+    Advert();
+    Advert(QString type, QString num, QString street, QString city, QString zip, QString description, int size, int rooms, int price);
+    int GetId();
+    void SetId(int id);
+    QString GetType();
+    void SetType(QString type);
+    QString GetNum();
+    void SetNum(QString num);
+    QString GetStreet();
+    void SetStreet(QString street);
+    QString GetCity();
+    void SetCity(QString city);
+    QString GetZip();
+    void SetZip(QString zip);
+    QString GetDescription();
+    void SetDescription(QString description);
+    int GetSize();
+    void SetSize(int size);
+    int GetRooms();
+    void SetRooms(int rooms);
+    int GetPrice();
+    void SetPrice(int price);
 };
 
 #endif // ADVERT_H

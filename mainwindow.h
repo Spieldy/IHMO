@@ -2,7 +2,18 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
 #include "advert.h"
+#include "advert_dialog.h"
+#include <iostream>
+#include <Qdir>
+#include <QList>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
+
+
+using namespace std;
+
 
 namespace Ui {
 class MainWindow;
@@ -16,11 +27,23 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    QList<Advert*> advert_tab;
+    QList<Advert*> last_advert_tab;
+    QList<Advert*> sale_tab;
+    QList<Advert*> saled_tab;
+    QList<Advert*> rent_tab;
+    QList<Advert*> rented_tab;
+    int nb_advert;
+
 private slots:
     void on_btn_add_advert_clicked();
 
 private:
     Ui::MainWindow *ui;
+    bool Save();
+    bool Charge();
+    bool hiddenSearch = true;
 };
 
 #endif // MAINWINDOW_H
