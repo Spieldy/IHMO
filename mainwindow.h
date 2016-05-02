@@ -34,16 +34,23 @@ protected:
     QList<Advert*> saled_tab;
     QList<Advert*> rent_tab;
     QList<Advert*> rented_tab;
-    int nb_advert;
 
 private slots:
     void on_btn_add_advert_clicked();
 
+    void on_btn_search_sale_clicked();
+
+    void on_btn_search_rent_clicked();
+
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
+    QStandardItemModel* model;
     bool Save();
     bool Charge();
-    bool hiddenSearch = true;
+    bool FillAllAdvert();
+    int new_id = 1;
+    int nb_advert = 0;
+
 };
 
 #endif // MAINWINDOW_H

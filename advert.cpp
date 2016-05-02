@@ -2,8 +2,9 @@
 
 Advert::Advert() {}
 
-Advert::Advert(QString type, QString num, QString street, QString city, QString zip, QString description, int size, int rooms, int price)
+Advert::Advert(QString type, QString num, QString street, QString city, QString zip, QString description, int isSaleRent, int size, int rooms, int price)
 {
+    this->isSaleRent = isSaleRent;
     this->type = type;
     this->num = num;
     this->street = street;
@@ -21,6 +22,22 @@ int Advert::GetId() {
 
 void Advert::SetId(int id) {
     this->id = id;
+}
+
+QDate Advert::GetDateCreation() {
+    return date_creation;
+}
+
+void Advert::SetDateCreation(QDate date_creation) {
+    this->date_creation = date_creation;
+}
+
+int Advert::GetIsSaleRent() {
+    return isSaleRent;
+}
+
+void Advert::SetIsSaleRent(int isSaleRent) {
+    this->isSaleRent = isSaleRent;
 }
 
 QString Advert::GetType() {
@@ -69,6 +86,38 @@ QString Advert::GetDescription() {
 
 void Advert::SetDescription(QString description) {
     this->description = description;
+}
+
+QString Advert::GetPhotoPrinc() {
+    return photo_princ;
+}
+
+void Advert::SetPhotoPrinc(QString photo_princ) {
+    this->photo_princ = photo_princ;
+}
+
+QString Advert::GetPhotoSup1() {
+    return photo_sup1;
+}
+
+void Advert::SetPhotoSup1(QString photo_sup1) {
+    this->photo_sup1 = photo_sup1;
+}
+
+QString Advert::GetPhotoSup2() {
+    return photo_sup2;
+}
+
+void Advert::SetPhotoSup2(QString photo_sup2) {
+    this->photo_sup2 = photo_sup2;
+}
+
+QString Advert::GetPhotoSup3() {
+    return photo_sup3;
+}
+
+void Advert::SetPhotoSup3(QString photo_sup3) {
+    this->photo_sup3 = photo_sup3;
 }
 
 int Advert::GetSize() {

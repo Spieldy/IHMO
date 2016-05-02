@@ -28,11 +28,14 @@
      <rect>
       <x>-2</x>
       <y>9</y>
-      <width>971</width>
-      <height>661</height>
+      <width>911</width>
+      <height>641</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="vl_main">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
+     </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -93,10 +96,10 @@
              <x>0</x>
              <y>10</y>
              <width>201</width>
-             <height>435</height>
+             <height>437</height>
             </rect>
            </property>
-           <layout class="QFormLayout" name="form_search_4">
+           <layout class="QFormLayout" name="form_search_sale">
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
@@ -111,7 +114,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="cbx_stype_4"/>
+             <widget class="QComboBox" name="cbx_stype">
+              <property name="editable">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="lbl_price_4">
@@ -135,12 +142,12 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLineEdit" name="le_scity_4"/>
+             <widget class="QLineEdit" name="le_scity"/>
             </item>
             <item row="4" column="1">
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
-               <widget class="QRadioButton" name="rdb_last_first_4">
+               <widget class="QRadioButton" name="rdb_last_first">
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
@@ -152,7 +159,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_5">
+               <widget class="QRadioButton" name="rdb_first_last">
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
@@ -173,14 +180,14 @@
              </widget>
             </item>
             <item row="5" column="1">
-             <widget class="QCheckBox" name="chx_photo_4">
+             <widget class="QCheckBox" name="chx_sphoto">
               <property name="text">
                <string>Photo(s) obligatoire</string>
               </property>
              </widget>
             </item>
             <item row="6" column="1">
-             <widget class="QPushButton" name="btn_search_rent_2">
+             <widget class="QPushButton" name="btn_search_sale">
               <property name="text">
                <string>Rechercher</string>
               </property>
@@ -189,21 +196,21 @@
             <item row="1" column="1">
              <layout class="QVBoxLayout" name="vl_price_minmax_2">
               <item>
-               <widget class="QLineEdit" name="le_price_min_4">
+               <widget class="QLineEdit" name="le_price_min">
                 <property name="placeholderText">
                  <string>Min</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lbl_etou_7">
+               <widget class="QLabel" name="lbl_etou">
                 <property name="text">
                  <string>et/ou</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="le_price_max_4">
+               <widget class="QLineEdit" name="le_price_max">
                 <property name="placeholderText">
                  <string>Max</string>
                 </property>
@@ -214,21 +221,21 @@
             <item row="2" column="1">
              <layout class="QVBoxLayout" name="vl_rooms_minmax_2">
               <item>
-               <widget class="QLineEdit" name="le_rooms_min_4">
+               <widget class="QLineEdit" name="le_rooms_min">
                 <property name="placeholderText">
                  <string>Min</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lbl_etou_8">
+               <widget class="QLabel" name="lbl_etou_2">
                 <property name="text">
                  <string>et/ou</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="le_rooms_max_4">
+               <widget class="QLineEdit" name="le_rooms_max">
                 <property name="placeholderText">
                  <string>Max</string>
                 </property>
@@ -252,7 +259,7 @@
              <height>435</height>
             </rect>
            </property>
-           <layout class="QFormLayout" name="form_search_3">
+           <layout class="QFormLayout" name="form_search_rent">
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
@@ -267,7 +274,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="cbx_stype_3"/>
+             <widget class="QComboBox" name="cbx_rtype">
+              <property name="editable">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="lbl_price_3">
@@ -291,12 +302,12 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLineEdit" name="le_scity_3"/>
+             <widget class="QLineEdit" name="le_rcity"/>
             </item>
             <item row="4" column="1">
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <widget class="QRadioButton" name="rdb_last_first_3">
+               <widget class="QRadioButton" name="rdb_last_first_2">
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
@@ -308,7 +319,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_4">
+               <widget class="QRadioButton" name="rdb_first_last_2">
                 <property name="font">
                  <font>
                   <pointsize>11</pointsize>
@@ -329,7 +340,7 @@
              </widget>
             </item>
             <item row="5" column="1">
-             <widget class="QCheckBox" name="chx_photo_3">
+             <widget class="QCheckBox" name="chx_rphoto">
               <property name="text">
                <string>Photo(s) obligatoire</string>
               </property>
@@ -345,7 +356,7 @@
             <item row="1" column="1">
              <layout class="QVBoxLayout" name="vl_price_minmax">
               <item>
-               <widget class="QLineEdit" name="le_price_min_3">
+               <widget class="QLineEdit" name="le_price_min_2">
                 <property name="placeholderText">
                  <string>Min</string>
                 </property>
@@ -359,7 +370,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="le_price_max_3">
+               <widget class="QLineEdit" name="le_price_max_2">
                 <property name="placeholderText">
                  <string>Max</string>
                 </property>
@@ -370,7 +381,7 @@
             <item row="2" column="1">
              <layout class="QVBoxLayout" name="vl_rooms_minmax">
               <item>
-               <widget class="QLineEdit" name="le_rooms_min_3">
+               <widget class="QLineEdit" name="le_rooms_min_2">
                 <property name="placeholderText">
                  <string>Min</string>
                 </property>
@@ -384,7 +395,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="le_rooms_max_3">
+               <widget class="QLineEdit" name="le_rooms_max_2">
                 <property name="placeholderText">
                  <string>Max</string>
                 </property>

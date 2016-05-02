@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IHMO>
+    <advert>
+        <immobilier>
+            <id>1</id>
+            <salerent>0</salerent>
+            <datecreation>lun. mai 2 2016</datecreation>
+            <type>Maison</type>
+            <size>123</size>
+            <room>5</room>
+            <address>
+                <num>12</num>
+                <street>rue</street>
+                <city>ville</city>
+                <zip>code</zip>
+            </address>
+            <description>deqcription</description>
+            <price>123000</price>
+            <photo>
+                <principal>/Users/Jeremy/Drive/L3-S6/IHM/IHMO/images/Exemple_maison.jpg</principal>
+                <sup1>chemin</sup1>
+                <sup2>chemin</sup2>
+                <sup3>chemin</sup3>
+            </photo>
+        </immobilier>
+        <immobilier>
+            <id>1</id>
+            <salerent>0</salerent>
+            <datecreation>lun. mai 2 2016</datecreation>
+            <type>Maison</type>
+            <size>455</size>
+            <room>7</room>
+            <address>
+                <num>122</num>
+                <street>rrue</street>
+                <city>vville</city>
+                <zip>ccoode</zip>
+            </address>
+            <description>deeeescripption</description>
+            <price>123445666</price>
+            <photo>
+                <principal>/Users/Jeremy/Drive/L3-S6/IHM/IHMO/images/Exemple_appartement.jpg</principal>
+                <sup1>/Users/Jeremy/Drive/L3-S6/IHM/IHMO/images/Exemple_appartement.jpg</sup1>
+                <sup2>/Users/Jeremy/Drive/L3-S6/IHM/IHMO/images/Exemple_maison.jpg</sup2>
+                <sup3>/Users/Jeremy/Drive/L3-S6/IHM/IHMO/images/Exemple_maison.jpg</sup3>
+            </photo>
+        </immobilier>
+    </advert>
+</IHMO>
