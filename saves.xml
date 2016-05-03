@@ -2,64 +2,20 @@
 <IHMO>
     <advert>
         <immobilier>
-            <id>1</id>
+            <id>0</id>
             <salerent>0</salerent>
             <datecreation>mar. mai 3 2016</datecreation>
-            <type>Maison</type>
-            <size>1233</size>
-            <room>2</room>
+            <type>Appartement</type>
+            <size>123</size>
+            <room>6</room>
             <address>
-                <num>13</num>
-                <street>rue </street>
-                <city>ville</city>
-                <zip>code</zip>
+                <num>34</num>
+                <street>rue des balayeurs</street>
+                <city>Strasbourg</city>
+                <zip>67000</zip>
             </address>
-            <description>okokok</description>
-            <price>1233</price>
-            <photo>
-                <principal></principal>
-                <sup1></sup1>
-                <sup2></sup2>
-                <sup3></sup3>
-            </photo>
-        </immobilier>
-        <immobilier>
-            <id>2</id>
-            <salerent>0</salerent>
-            <datecreation>mar. mai 3 2016</datecreation>
-            <type>Château</type>
-            <size>12</size>
-            <room>4</room>
-            <address>
-                <num>122</num>
-                <street>rfkrokf</street>
-                <city>cocokcok</city>
-                <zip>3455</zip>
-            </address>
-            <description>dederegree</description>
-            <price>12333</price>
-            <photo>
-                <principal></principal>
-                <sup1></sup1>
-                <sup2></sup2>
-                <sup3></sup3>
-            </photo>
-        </immobilier>
-        <immobilier>
-            <id>3</id>
-            <salerent>1</salerent>
-            <datecreation>mar. mai 3 2016</datecreation>
-            <type>Maison</type>
-            <size>34454</size>
-            <room>3</room>
-            <address>
-                <num>123</num>
-                <street>ofkfokr</street>
-                <city>crkr</city>
-                <zip>pepf</zip>
-            </address>
-            <description>ekfokfokz</description>
-            <price>132</price>
+            <description>Belle et grande maison</description>
+            <price>130000</price>
             <photo>
                 <principal></principal>
                 <sup1></sup1>

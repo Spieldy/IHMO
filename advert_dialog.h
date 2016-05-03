@@ -32,6 +32,10 @@ private:
     int id;
     int nb_photo_supp = 0;
     int nb_photo_princ = 0;
+    QLabel* photo_princ;
+    QLabel* photo_sup1;
+    QLabel* photo_sup2;
+    QLabel* photo_sup3;
 
 signals:
 
@@ -43,6 +47,8 @@ private slots:
     void on_btn_cancel_clicked();
     void on_btn_photo_princ_clicked();
     void on_btn_photo_sup_clicked();
+    void on_btn_suppr_princ_clicked();
+    void on_btn_suppr_sup_clicked();
 };
 
 #endif // ADVERT_DIALOG_H

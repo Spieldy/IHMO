@@ -8,19 +8,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QMessageBox msgBox;
     if (Charge()) {
+        UpdateTab();
         ui->setupUi(this);
         ui->rdb_last_first->setChecked(true);
 
-        model = new QStandardItemModel(1,7,this); //2 Rows and 5 Columns
-        model->setHorizontalHeaderItem(0, new QStandardItem(QString("")));
-        model->setHorizontalHeaderItem(1, new QStandardItem(QString("")));
-        model->setHorizontalHeaderItem(2, new QStandardItem(QString("Type")));
-        model->setHorizontalHeaderItem(3, new QStandardItem(QString("Prix")));
-        model->setHorizontalHeaderItem(4, new QStandardItem(QString("Adresse")));
-        model->setHorizontalHeaderItem(5, new QStandardItem(QString("Taille (m2)")));
-        model->setHorizontalHeaderItem(6, new QStandardItem(QString("Pièce(s)")));
-        if (FillAllAdvert())
+        model = new QStandardItemModel(advert_tab.count(),7,this);
+        if (FillAllAdvert(advert_tab)) {
             ui->tableView->setModel(model);
+            ui->tableView->resizeRowsToContents();
+            ui->tableView->resizeColumnsToContents();
+        }
         else
             msgBox.critical(this, "Erreur", "Problème rencontré lors du remplissage du tableau");
     } else
@@ -38,16 +35,24 @@ MainWindow::~MainWindow()
     }
 }
 
-bool MainWindow::FillAllAdvert() {
+bool MainWindow::FillAllAdvert(QList<Advert*> tab) {
     int i;
-    for(i=0; i<advert_tab.count(); ++i )
+    model->clear();
+    model->setHorizontalHeaderItem(0, new QStandardItem(QString("")));
+    model->setHorizontalHeaderItem(1, new QStandardItem(QString("")));
+    model->setHorizontalHeaderItem(2, new QStandardItem(QString("Type")));
+    model->setHorizontalHeaderItem(3, new QStandardItem(QString("Prix")));
+    model->setHorizontalHeaderItem(4, new QStandardItem(QString("Adresse")));
+    model->setHorizontalHeaderItem(5, new QStandardItem(QString("Taille (m2)")));
+    model->setHorizontalHeaderItem(6, new QStandardItem(QString("Pièce(s)")));
+    for(i=0; i<tab.count(); ++i )
     {
         QStandardItem *photo = new QStandardItem();
-        QPixmap p(advert_tab[i]->GetPhotoPrinc());;
+        QPixmap p(tab[i]->GetPhotoPrinc());;
         photo->setData(QVariant(p.scaled(75, 75, Qt::KeepAspectRatio)), Qt::DecorationRole);
         model->setItem(i, 0, photo);
 
-        int saleRent  = advert_tab[i]->GetIsSaleRent();
+        int saleRent  = tab[i]->GetIsSaleRent();
         QStandardItem *isSaleRent = new QStandardItem();
         if (saleRent == 0)
             isSaleRent->setText("Vente");
@@ -55,17 +60,22 @@ bool MainWindow::FillAllAdvert() {
             isSaleRent->setText("Location");
         model->setItem(i,1,isSaleRent);
 
-        QStandardItem *type = new QStandardItem(QString(advert_tab[i]->GetType()));
+        QStandardItem *type = new QStandardItem(QString(tab[i]->GetType()));
         model->setItem(i,2,type);
-        QStandardItem *price = new QStandardItem(QString::number(advert_tab[i]->GetPrice()));
+        QStandardItem *price = new QStandardItem(QString::number(tab[i]->GetPrice()));
         model->setItem(i,3,price);
-        QStandardItem *address = new QStandardItem(QString(advert_tab[i]->GetNum()+", "+advert_tab[i]->GetStreet()+", "+advert_tab[i]->GetCity()+", "+advert_tab[i]->GetZip()));
+        QStandardItem *address = new QStandardItem(QString(tab[i]->GetNum()+", "+tab[i]->GetStreet()+", "+tab[i]->GetCity()+", "+tab[i]->GetZip()));
         model->setItem(i,4,address);
-        QStandardItem *size = new QStandardItem(QString::number(advert_tab[i]->GetSize()));
+        QStandardItem *size = new QStandardItem(QString::number(tab[i]->GetSize()));
         model->setItem(i,5,size);
-        QStandardItem *rooms = new QStandardItem(QString::number(advert_tab[i]->GetRooms()));
+        QStandardItem *rooms = new QStandardItem(QString::number(tab[i]->GetRooms()));
         model->setItem(i,6,rooms);
+        QMessageBox msg;
     }
+
+    ui->tableView->resizeRowsToContents();
+    ui->tableView->resizeColumnsToContents();
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
 
     return true;
 }
@@ -189,11 +199,6 @@ bool MainWindow::Charge() {
                 else if (element == "sup3") {
                     advert->SetPhotoSup3(reader.readElementText());
                     advert_tab.append(advert);
-                    if (advert->GetIsSaleRent() == 0)
-                        sale_tab.append(advert);
-                    else if (advert->GetIsSaleRent() == 1)
-                        rent_tab.append(advert);
-                    nb_advert = nb_advert + 1;
                     element = "immobilier";
                 }
             }
@@ -205,6 +210,7 @@ bool MainWindow::Charge() {
 }
 
 bool MainWindow::Save() {
+
     QString fileXmlName = QDir::currentPath() + "/saves.xml";
 
     QFile fileXml(fileXmlName);
@@ -226,7 +232,7 @@ bool MainWindow::Save() {
     writer.writeStartElement("advert");
 
     // Parcours tableau d'annonce pour sauvegarde
-    for(int i = 0; i < nb_advert && nb_advert != 0; i++) {
+    for(int i = 0; i < advert_tab.count() && advert_tab.count() != 0; i++) {
         writer.writeStartElement("immobilier");
 
         writer.writeTextElement("id", QString::number(advert_tab[i]->GetId()));
@@ -268,36 +274,213 @@ bool MainWindow::Save() {
     return true;
 }
 
+void MainWindow::UpdateTab() {
+    int i;
+    for (i = 0; i < advert_tab.count(); ++i) {
+        if (advert_tab[i]->GetIsSaleRent() == 0)
+            sale_tab.append(advert_tab[i]);
+        else if (advert_tab[i]->GetIsSaleRent() == 1)
+            rent_tab.append(advert_tab[i]);
+    }
+}
+
 void MainWindow::on_btn_add_advert_clicked()
 {
-    Advert_Dialog *advert_dlg = new Advert_Dialog(this, new_id);
+    Advert_Dialog *advert_dlg = new Advert_Dialog(this, current_id);
     Advert *advert;
     if (advert_dlg->exec() == QDialog::Accepted) {
         advert = advert_dlg->GetAdvert();
-        new_id = new_id + 1;
+        current_id++;
         advert_tab.append(advert);
-        if (advert->GetIsSaleRent() == 0)
-            sale_tab.append(advert);
-        else if (advert->GetIsSaleRent() == 1)
-            rent_tab.append(advert);
-        nb_advert = nb_advert + 1;
-        FillAllAdvert();
+        UpdateTab();
+        QMessageBox msg;
+        msg.setText(QString::number(sale_tab.count()));
+        msg.exec();
+        FillAllAdvert(advert_tab);
     }
     delete advert_dlg;
 }
 
 void MainWindow::on_btn_search_clicked()
 {
-    CheckLE();
-    QString price_min = ui->le_price_min->text();
-    QString price_max = "";
-    QString rooms_min = "";
-    QString rooms_max = "";
-    QString type = "";
-    QString city = "";
+    if (CheckLE()) {
+        QString sprice_min = ui->le_price_min->text();
+        QString sprice_max = ui->le_price_max->text();
+        QString srooms_min = ui->le_rooms_min->text();
+        QString srooms_max = ui->le_rooms_max->text();
+        QString ssize_min = ui->le_size_min->text();
+        QString ssize_max = ui->le_size_max->text();
+        QString type = ui->cbx_type->currentText().toLower();
+        QString city = ui->le_city->text().toLower();
+        QString num = ui->le_num->text().toLower();
+        QString street = ui->le_street->text().toLower();
+        QString zip = ui->le_zip->text().toLower();
 
-    QList<Advert*> work_tab;
 
+        bool isPhoto = ui->chx_photo->isChecked();
+        bool isPriceMin = sprice_min.isEmpty();
+        bool isPriceMax = sprice_max.isEmpty();
+        bool isRoomsMin = srooms_min.isEmpty();
+        bool isRoomsMax = srooms_max.isEmpty();
+        bool isSizeMin = ssize_min.isEmpty();
+        bool isSizeMax = ssize_max.isEmpty();
+        bool isType = type.isEmpty();
+        bool isCity = city.isEmpty();
+        bool isNum = num.isEmpty();
+        bool isStreet = street.isEmpty();
+        bool isZip = zip.isEmpty();
+        bool isSale = ui->chx_sale->isChecked();
+        bool isRent = ui->chx_rent->isChecked();
+
+        int price_min;
+        int price_max;
+        int rooms_min;
+        int rooms_max;
+        int size_min;
+        int size_max;
+
+        bool ok;
+        int i;
+
+        QList<Advert*> working_tab;
+        search_tab.clear();
+
+        QMessageBox msg;
+
+        if (isSale && !isRent)
+            working_tab = sale_tab;
+        else if (!isSale && isRent)
+            working_tab = rent_tab;
+        else
+            working_tab = advert_tab;
+
+        if (isPriceMin)
+            price_min = 0;
+        else
+            price_min = sprice_min.toInt(&ok, 10);
+        if (isPriceMax)
+            price_max = std::numeric_limits<int>::max();
+        else
+            price_max = sprice_max.toInt(&ok, 10);
+
+        if (isRoomsMin)
+            rooms_min = 0;
+        else
+            rooms_min = srooms_min.toInt(&ok, 10);
+        if (isRoomsMax)
+            rooms_max = std::numeric_limits<int>::max();
+        else
+            rooms_max = srooms_max.toInt(&ok, 10);
+
+        if (isSizeMin)
+            size_min = 0;
+        else
+            size_min = ssize_min.toInt(&ok, 10);
+        if (isSizeMax)
+            size_max = std::numeric_limits<int>::max();
+        else
+            size_max = ssize_max.toInt(&ok, 10);
+
+        for(i=0; i<working_tab.count(); ++i )
+        {
+            QString a_type = working_tab[i]->GetType().toLower();
+            int a_size = working_tab[i]->GetSize();
+            int a_rooms = working_tab[i]->GetRooms();
+            int a_price = working_tab[i]->GetPrice();
+            QString a_city = working_tab[i]->GetCity().toLower();
+            QString a_num = working_tab[i]->GetNum().toLower();
+            QString a_street = working_tab[i]->GetStreet().toLower();
+            QString a_zip = working_tab[i]->GetZip().toLower();
+            QString a_photo = working_tab[i]->GetPhotoPrinc().toLower();
+
+            if (isPhoto) {
+                if (!isType && (!isCity || !isZip)) {
+                    if (!isStreet) {
+                        if (!isNum) {
+                            if (a_type == type && (a_city == city || a_zip == zip) && a_street == street && a_num == num && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        } else {
+                            if (a_type == type && (a_city == city || a_zip == zip) && a_street == street && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        }
+                    } else {
+                        if (a_type == type && (a_city == city || a_zip == zip) && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                            search_tab.append(working_tab[i]);
+                        }
+                    }
+                } else if (isType && (!isCity || !isZip)) {
+                    if (!isStreet) {
+                        if (!isNum) {
+                            if ((a_city == city || a_zip == zip) && a_street == street && a_num == num && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        } else {
+                            if ((a_city == city || a_zip == zip) && a_street == street && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        }
+                    } else {
+                        if ((a_city == city || a_zip == zip) && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                            search_tab.append(working_tab[i]);
+                        }
+                    }
+                } else if (!isType && isCity) {
+                    if (a_type == type && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max  && a_photo != "") {
+                        search_tab.append(working_tab[i]);
+                    }
+                } else {
+                    if (a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max  && a_photo != "") {
+                        search_tab.append(working_tab[i]);
+                    }
+                }
+            } else {
+                if (!isType && (!isCity || !isZip)) {
+                    if (!isStreet) {
+                        if (!isNum) {
+                            if (a_type == type && (a_city == city || a_zip == zip) && a_street == street && a_num == num && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        } else {
+                            if (a_type == type && (a_city == city || a_zip == zip) && a_street == street && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        }
+                    } else {
+                        if (a_type == type && (a_city == city || a_zip == zip) && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                            search_tab.append(working_tab[i]);
+                        }
+                    }
+                } else if (isType && (!isCity || !isZip)) {
+                    if (!isStreet) {
+                        if (!isNum) {
+                            if ((a_city == city || a_zip == zip) && a_street == street && a_num == num && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        } else {
+                            if ((a_city == city || a_zip == zip) && a_street == street && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                                search_tab.append(working_tab[i]);
+                            }
+                        }
+                    } else {
+                        if ((a_city == city || a_zip == zip) && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                            search_tab.append(working_tab[i]);
+                        }
+                    }
+                } else if (!isType && isCity) {
+                    if (a_type == type && a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                        search_tab.append(working_tab[i]);
+                    }
+                } else {
+                    if (a_size >= size_min && a_size <= size_max && a_rooms >= rooms_min && a_rooms <= rooms_max && a_price >= price_min && a_price <= price_max) {
+                        search_tab.append(working_tab[i]);
+                    }
+                }
+            }
+        }
+        FillAllAdvert(search_tab);
+    }
 }
 
 bool MainWindow::isLEValide(QLineEdit *le) {
@@ -308,6 +491,55 @@ bool MainWindow::isLEValide(QLineEdit *le) {
             test = false;
     }
     return test;
+}
+
+bool MainWindow::CheckLE() {
+
+    bool test = true;
+    bool test_valide = false;
+
+    QMessageBox msgBox;
+    QString error = "";
+    QString error_valide = "";
+
+    if (!test_valide) {
+        error_valide.append("Champ(s) invalide(s):\n");
+        if (!isLEValide(ui->le_price_min)) {
+            error_valide.append("       Prix min\n");
+            test_valide = true;
+        }
+        if (!isLEValide(ui->le_price_max)) {
+            error_valide.append("       Prix max\n");
+            test_valide = true;
+        }
+        if (!isLEValide(ui->le_rooms_min)) {
+            error_valide.append("       Pièces min\n");
+            test_valide = true;
+        }
+        if (!isLEValide(ui->le_rooms_max)) {
+            error_valide.append("       Pièces max\n");
+            test_valide = true;
+        }
+        if (!ui->le_street->text().isEmpty() && (ui->le_city->text().isEmpty() && ui->le_zip->text().isEmpty())) {
+            error_valide.append("\nDonner une ville ou un code\n");
+            test_valide = true;
+        }
+        if (!ui->le_num->text().isEmpty() && ui->le_street->text().isEmpty()) {
+            error_valide.append("\nDonner une rue\n");
+            test_valide = true;
+        }
+    }
+
+    if (test_valide) {
+        error.append(error_valide);
+        test = false;
+    }
+    if (!test) {
+        msgBox.critical(this, "Erreur", error);
+        return false;
+    }
+    else
+        return true;
 }
 
 void MainWindow::on_le_price_min_textEdited(const QString &arg1)
@@ -374,42 +606,59 @@ void MainWindow::on_le_rooms_max_textEdited(const QString &arg1)
     }
 }
 
-bool MainWindow::CheckLE() {
-    bool test = true;
-    bool test_valide = false;
-
-    QMessageBox msgBox;
-    QString error = "";
-    QString error_valide = "";
-
-    if (!test_valide) {
-        error_valide.append("Champ(s) invalide(s):\n");
-        if (!isLEValide(ui->le_price_min)) {
-            error_valide.append("       Prix min\n");
-            test_valide = true;
-        }
-        if (!isLEValide(ui->le_price_max)) {
-            error_valide.append("       Prix max\n");
-            test_valide = true;
-        }
-        if (!isLEValide(ui->le_rooms_min)) {
-            error_valide.append("       Pièces min\n");
-            test_valide = true;
-        }
-        if (!isLEValide(ui->le_rooms_max)) {
-            error_valide.append("       Pièces max\n");
-            test_valide = true;
+void MainWindow::on_le_size_min_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_size_min->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_size_min->setText(tmp);
+            }
         }
     }
+}
 
-    if (test_valide) {
-        error.append(error_valide);
-        test = false;
+void MainWindow::on_le_size_max_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_size_max->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_size_max->setText(tmp);
+            }
+        }
     }
-    if (!test) {
-        msgBox.critical(this, "Erreur", error);
-        return false;
-    }
-    else
-        return true;
+}
+
+void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
+{
+    Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
+       if (advert_dlg->exec() == QDialog::Accepted){
+           advert_tab[index.row()] = advert_dlg->GetAdvert();
+           FillAllAdvert(advert_tab);
+       }
+       delete advert_dlg;
+}
+
+void MainWindow::on_tableView_clicked(const QModelIndex &index)
+{
+    ui->tableView->selectRow(index.row());
+}
+
+void MainWindow::on_btn_suppress_add_clicked()
+{
+    QModelIndexList rowToSuppress = ui->tableView->selectionModel()->selectedRows();
+        int max = rowToSuppress.count();
+        for (int i = 0; i < max ; i++){
+            advert_tab.removeAt(rowToSuppress.at(i).row());
+        }
+        FillAllAdvert(advert_tab);
 }

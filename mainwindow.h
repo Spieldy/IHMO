@@ -10,6 +10,7 @@
 #include <QList>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
+#include <limits>
 
 
 using namespace std;
@@ -49,16 +50,26 @@ private slots:
 
     void on_le_rooms_max_textEdited(const QString &arg1);
 
+    void on_le_size_min_textEdited(const QString &arg1);
+
+    void on_le_size_max_textEdited(const QString &arg1);
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_tableView_clicked(const QModelIndex &index);
+
+    void on_btn_suppress_add_clicked();
+
 private:
     Ui::MainWindow* ui;
     QStandardItemModel* model;
     bool Save();
     bool Charge();
-    bool FillAllAdvert();
+    bool FillAllAdvert(QList<Advert*> tab);
     bool CheckLE();
     bool isLEValide(QLineEdit *le);
-    int new_id = 1;
-    int nb_advert = 0;
+    void UpdateTab();
+    int current_id = 0;
 
 };
 

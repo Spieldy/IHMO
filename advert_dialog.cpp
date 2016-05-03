@@ -18,6 +18,88 @@ Advert_Dialog::Advert_Dialog(QMainWindow *parent, Advert* advert, int id) :
     ui->setupUi(this);
     this->advert = advert;
     this->id = id;
+
+    QString types[6];
+    types[0] = QString("Maison");
+    types[1] = QString("Appartement");
+    types[2] = QString("Bureau");
+    types[3] = QString("Commerce");
+    types[4] = QString("Ferme");
+    types[5] = QString("Château");
+    int selectedIndex = 0;
+
+    for (int i = 0; i < 6 ; i++){
+        if (types[i].compare(this->advert->GetType()) == 0){
+            selectedIndex = i;
+        }
+    }
+    ui->cbx_type->setCurrentIndex(selectedIndex);
+
+
+    ui->le_num->setText(this->advert->GetNum());
+    ui->le_street->setText((this->advert->GetStreet()));
+    ui->le_city->setText(this->advert->GetCity());
+    ui->le_zip->setText(this->advert->GetZip());
+    ui->te_description->setText(this->advert->GetDescription());
+
+    QPixmap* p;
+    if (!advert->GetPhotoPrinc().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoPrinc());
+        photo_princ = new QLabel();
+        photo_princ->setObjectName("lbl_show_princ");
+        photo_princ->resize(75, 75);
+        photo_princ->setPixmap(p->scaled(photo_princ->width(),photo_princ->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_princ->addWidget(photo_princ);
+        nb_photo_princ++;
+    }
+
+    if(!advert->GetPhotoSup1().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoSup1());
+
+        photo_sup1 = new QLabel();
+        photo_sup1->setObjectName("lbl_show_sup1");
+        photo_sup1->resize(75, 75);
+        photo_sup1->setPixmap(p->scaled(photo_sup1->width(),photo_sup1->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_sup->addWidget(photo_sup1);
+
+        nb_photo_supp++;
+    }
+
+    if(!advert->GetPhotoSup2().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoSup2());
+
+        photo_sup2 = new QLabel();
+        photo_sup2->setObjectName("lbl_show_sup2");
+        photo_sup2->resize(75, 75);
+        photo_sup2->setPixmap(p->scaled(photo_sup2->width(),photo_sup2->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_sup->addWidget(photo_sup2);
+
+        nb_photo_supp++;
+    }
+
+    if(!advert->GetPhotoSup3().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoSup3());
+
+        photo_sup3 = new QLabel();
+        photo_sup3->setObjectName("lbl_show_sup3");
+        photo_sup3->resize(75, 75);
+        photo_sup3->setPixmap(p->scaled(photo_sup3->width(),photo_sup3->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_sup->addWidget(photo_sup3);
+
+        nb_photo_supp++;
+    }
+
+    ui->le_size->setText(QString::number(this->advert->GetSize()));
+    ui->spb_rooms->setValue(this->advert->GetRooms());
+    ui->le_price->setText(QString::number(this->advert->GetPrice()));
+
+    if (this->advert->GetIsSaleRent() == 1){
+        ui->rdb_rent->setChecked(true);
+        ui->rdb_sale->setChecked(false);
+    }else{
+        ui->rdb_rent->setChecked(false);
+        ui->rdb_sale->setChecked(true);
+    }
 }
 
 Advert_Dialog::~Advert_Dialog()
@@ -189,18 +271,18 @@ void Advert_Dialog::on_btn_photo_princ_clicked()
         QFile::copy(fileInfo.filePath(), QDir::currentPath()+"/images/"+fileInfo.fileName());
         advert->SetPhotoPrinc(QDir::currentPath()+"/images/"+fileInfo.fileName());
 
-        nb_photo_princ = nb_photo_princ + 1;
+        nb_photo_princ++;
 
         QPixmap p(advert->GetPhotoPrinc());
         // get label dimensions
 
-        QLabel* label_photo = new QLabel();
-        label_photo->resize(75, 75);
-        label_photo->setPixmap(p.scaled(label_photo->width(),label_photo->height(),Qt::KeepAspectRatio));
-        ui->hl_photo_princ->addWidget(label_photo);
+        photo_princ = new QLabel();
+        photo_princ->setObjectName("lbl_show_princ");
+        photo_princ->resize(75, 75);
+        photo_princ->setPixmap(p.scaled(photo_princ->width(),photo_princ->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_princ->addWidget(photo_princ);
     } else
         return;
-
 }
 
 void Advert_Dialog::on_btn_photo_sup_clicked()
@@ -218,22 +300,61 @@ void Advert_Dialog::on_btn_photo_sup_clicked()
         if (nb_photo_supp == 0) {
             advert->SetPhotoSup1(QDir::currentPath()+"/images/"+fileInfo.fileName());
             p = new QPixmap(advert->GetPhotoSup1());
+            photo_sup1 = new QLabel();
+            photo_sup1->setObjectName("lbl_show_sup1");
+            photo_sup1->resize(75, 75);
+            photo_sup1->setPixmap(p->scaled(photo_sup1->width(),photo_sup1->height(),Qt::KeepAspectRatio));
+            ui->hl_photo_sup->addWidget(photo_sup1);
         } else if (nb_photo_supp == 1) {
             advert->SetPhotoSup2(QDir::currentPath()+"/images/"+fileInfo.fileName());
             p = new QPixmap(advert->GetPhotoSup2());
+            photo_sup2 = new QLabel();
+            photo_sup2->setObjectName("lbl_show_sup2");
+            photo_sup2->resize(75, 75);
+            photo_sup2->setPixmap(p->scaled(photo_sup2->width(),photo_sup2->height(),Qt::KeepAspectRatio));
+            ui->hl_photo_sup->addWidget(photo_sup2);
         } else if (nb_photo_supp == 2) {
             advert->SetPhotoSup3(QDir::currentPath()+"/images/"+fileInfo.fileName());
             p = new QPixmap(advert->GetPhotoSup3());
+            photo_sup3 = new QLabel();
+            photo_sup3->setObjectName("lbl_show_sup3");
+            photo_sup3->resize(75, 75);
+            photo_sup3->setPixmap(p->scaled(photo_sup3->width(),photo_sup3->height(),Qt::KeepAspectRatio));
+            ui->hl_photo_sup->addWidget(photo_sup3);
         }
 
         nb_photo_supp = nb_photo_supp + 1;
 
         // get label dimensions
 
-        QLabel* label_photo = new QLabel();
-        label_photo->resize(75, 75);
-        label_photo->setPixmap(p->scaled(label_photo->width(),label_photo->height(),Qt::KeepAspectRatio));
-        ui->hl_photo_sup->addWidget(label_photo);
+
     } else
         return;
+}
+
+
+void Advert_Dialog::on_btn_suppr_princ_clicked()
+{
+    if (nb_photo_princ > 0) {
+        ui->hl_photo_princ->removeWidget(photo_princ);
+        advert->SetPhotoPrinc("");
+        nb_photo_princ--;
+    }
+}
+
+void Advert_Dialog::on_btn_suppr_sup_clicked()
+{
+    if (nb_photo_supp == 3) {
+        ui->hl_photo_sup->removeWidget(photo_sup3);
+        advert->SetPhotoSup3("");
+        nb_photo_supp--;
+    } else if (nb_photo_supp == 2) {
+        ui->hl_photo_sup->removeWidget(photo_sup2);
+        advert->SetPhotoSup2("");
+        nb_photo_supp--;
+    } else if (nb_photo_supp == 1) {
+        ui->hl_photo_sup->removeWidget(photo_sup1);
+        advert->SetPhotoSup1("");
+        nb_photo_supp--;
+    }
 }

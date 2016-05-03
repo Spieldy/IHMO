@@ -23,280 +23,438 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="verticalLayoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>-2</x>
-      <y>9</y>
-      <width>911</width>
-      <height>641</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="vl_main">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
-     </property>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="btn_add_advert">
-         <property name="text">
-          <string>Ajouter une annonce</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_statistic">
-         <property name="text">
-          <string>Statistiques</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QTabWidget" name="tab_search">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>210</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="tab_sale">
-          <attribute name="title">
-           <string>Vente</string>
-          </attribute>
-          <widget class="QWidget" name="formLayoutWidget_4">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="vl_main">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="h">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="btn_add_advert">
+          <property name="text">
+           <string>Ajouter une annonce</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_suppress_add">
+          <property name="text">
+           <string>Supprimer des annonces</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_statistic">
+          <property name="text">
+           <string>Statistiques</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="hl_container">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="wdg_search" native="true">
+          <property name="maximumSize">
+           <size>
+            <width>225</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_2">
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>10</y>
-             <width>201</width>
-             <height>485</height>
+             <y>0</y>
+             <width>221</width>
+             <height>620</height>
             </rect>
            </property>
-           <layout class="QFormLayout" name="form_search_sale">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-            </property>
-            <property name="verticalSpacing">
-             <number>28</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lbl_stype_4">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="lbl_search">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>16</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="text">
-               <string>Type</string>
+               <string>Barre de recherche</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="cbx_type">
-              <property name="editable">
-               <bool>true</bool>
+            <item>
+             <layout class="QFormLayout" name="form_search">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>Maison</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Appartement</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Bureau</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Commerce</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Ferme</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Château</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lbl_price_4">
-              <property name="text">
-               <string>Prix</string>
+              <property name="verticalSpacing">
+               <number>20</number>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <layout class="QVBoxLayout" name="vl_price_minmax_2">
-              <item>
-               <widget class="QLineEdit" name="le_price_min">
-                <property name="placeholderText">
-                 <string>Min</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lbl_etou">
+              <item row="1" column="0">
+               <widget class="QLabel" name="lbl_type">
                 <property name="text">
-                 <string>et/ou</string>
+                 <string>Type</string>
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QLineEdit" name="le_price_max">
-                <property name="placeholderText">
-                 <string>Max</string>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="cbx_type">
+                <property name="editable">
+                 <bool>false</bool>
+                </property>
+                <item>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Maison</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Appartement</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Bureau</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Commerce</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Ferme</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Château</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lbl_price">
+                <property name="text">
+                 <string>Prix</string>
                 </property>
                </widget>
+              </item>
+              <item row="2" column="1">
+               <layout class="QVBoxLayout" name="vl_price_minmax">
+                <item>
+                 <widget class="QLineEdit" name="le_price_min">
+                  <property name="placeholderText">
+                   <string>Min</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lbl_etou">
+                  <property name="text">
+                   <string>et/ou</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="le_price_max">
+                  <property name="placeholderText">
+                   <string>Max</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="lbl_rooms">
+                <property name="text">
+                 <string>Pièces</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <layout class="QVBoxLayout" name="vl_rooms_minmax">
+                <item>
+                 <widget class="QLineEdit" name="le_rooms_min">
+                  <property name="placeholderText">
+                   <string>Min</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lbl_etou_2">
+                  <property name="text">
+                   <string>et/ou</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="le_rooms_max">
+                  <property name="placeholderText">
+                   <string>Max</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="lbl_city">
+                <property name="text">
+                 <string>Ville</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="lbl_tri">
+                <property name="text">
+                 <string>Ordre</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <layout class="QVBoxLayout" name="vl_date">
+                <item>
+                 <widget class="QRadioButton" name="rdb_last_first">
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Récentes -&gt; anciennes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="rdb_first_last">
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Anciennes -&gt; Récentes</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="7" column="1">
+               <widget class="QCheckBox" name="chx_photo">
+                <property name="text">
+                 <string>Photo(s) obligatoire</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QPushButton" name="btn_search">
+                <property name="text">
+                 <string>Lancer</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="lbl_size">
+                <property name="text">
+                 <string>Taille</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <layout class="QVBoxLayout" name="vl_size_minmax">
+                <item>
+                 <widget class="QLineEdit" name="le_size_min">
+                  <property name="placeholderText">
+                   <string>Min</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lbl_etou_3">
+                  <property name="text">
+                   <string>et/ou</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="le_size_max">
+                  <property name="placeholderText">
+                   <string>Max</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="1">
+               <layout class="QHBoxLayout" name="hl_issalerent">
+                <item>
+                 <widget class="QCheckBox" name="chx_sale">
+                  <property name="text">
+                   <string>Vente</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="chx_rent">
+                  <property name="text">
+                   <string>Location</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="5" column="1">
+               <layout class="QVBoxLayout" name="vl_address" stretch="0,0">
+                <property name="spacing">
+                 <number>-1</number>
+                </property>
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetDefaultConstraint</enum>
+                </property>
+                <item>
+                 <layout class="QHBoxLayout" name="hl_num_street">
+                  <item>
+                   <widget class="QLineEdit" name="le_num">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>2</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="placeholderText">
+                     <string>Num</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="le_street">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>6</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="placeholderText">
+                     <string>Rue</string>
+                    </property>
+                    <property name="clearButtonEnabled">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="hl_city_code">
+                  <item>
+                   <widget class="QLineEdit" name="le_city">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>4</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="placeholderText">
+                     <string>Ville</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="le_zip">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>2</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="placeholderText">
+                     <string>Code</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
               </item>
              </layout>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lbl_rooms_4">
-              <property name="text">
-               <string>Pièces</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <layout class="QVBoxLayout" name="vl_rooms_minmax_2">
-              <item>
-               <widget class="QLineEdit" name="le_rooms_min">
-                <property name="placeholderText">
-                 <string>Min</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lbl_etou_2">
-                <property name="text">
-                 <string>et/ou</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="le_rooms_max">
-                <property name="placeholderText">
-                 <string>Max</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lbl_city_4">
-              <property name="text">
-               <string>Ville</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="le_city"/>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lbl_tri_4">
-              <property name="text">
-               <string>Ordre</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <widget class="QRadioButton" name="rdb_last_first">
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Récentes -&gt; anciennes</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="rdb_first_last">
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Anciennes -&gt; Récentes</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="5" column="1">
-             <widget class="QCheckBox" name="chx_sphoto">
-              <property name="text">
-               <string>Photo(s) obligatoire</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QPushButton" name="btn_search">
-              <property name="text">
-               <string>Rechercher</string>
-              </property>
-             </widget>
             </item>
            </layout>
           </widget>
          </widget>
-         <widget class="QWidget" name="tab_rent">
-          <attribute name="title">
-           <string>Location</string>
-          </attribute>
+        </item>
+        <item>
+         <widget class="QTableView" name="tableView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
          </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTableView" name="tableView">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

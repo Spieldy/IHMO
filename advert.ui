@@ -50,7 +50,7 @@
       <item row="1" column="1">
        <widget class="QComboBox" name="cbx_type">
         <property name="editable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <item>
          <property name="text">
@@ -292,6 +292,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QToolButton" name="btn_suppr_princ">
+            <property name="text">
+             <string>Suppr</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -312,12 +319,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QToolButton" name="btn_suppr_sup">
+          <property name="text">
+           <string>Suppr</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item row="8" column="0">
        <widget class="QLabel" name="lbl_photo_sup">
         <property name="text">
-         <string>Photo(s) supplémentaire(s)</string>
+         <string>Photo(s) supplé.</string>
         </property>
        </widget>
       </item>
