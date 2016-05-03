@@ -96,7 +96,7 @@
              <x>0</x>
              <y>10</y>
              <width>201</width>
-             <height>437</height>
+             <height>485</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="form_search_sale">
@@ -118,6 +118,36 @@
               <property name="editable">
                <bool>true</bool>
               </property>
+              <item>
+               <property name="text">
+                <string>Maison</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Appartement</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Bureau</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Commerce</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Ferme</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Château</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="1" column="0">
@@ -127,12 +157,62 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="1">
+             <layout class="QVBoxLayout" name="vl_price_minmax_2">
+              <item>
+               <widget class="QLineEdit" name="le_price_min">
+                <property name="placeholderText">
+                 <string>Min</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lbl_etou">
+                <property name="text">
+                 <string>et/ou</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="le_price_max">
+                <property name="placeholderText">
+                 <string>Max</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="lbl_rooms_4">
               <property name="text">
                <string>Pièces</string>
               </property>
              </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QVBoxLayout" name="vl_rooms_minmax_2">
+              <item>
+               <widget class="QLineEdit" name="le_rooms_min">
+                <property name="placeholderText">
+                 <string>Min</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lbl_etou_2">
+                <property name="text">
+                 <string>et/ou</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="le_rooms_max">
+                <property name="placeholderText">
+                 <string>Max</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="lbl_city_4">
@@ -143,6 +223,13 @@
             </item>
             <item row="3" column="1">
              <widget class="QLineEdit" name="le_scity"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lbl_tri_4">
+              <property name="text">
+               <string>Ordre</string>
+              </property>
+             </widget>
             </item>
             <item row="4" column="1">
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -172,13 +259,6 @@
               </item>
              </layout>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lbl_tri_4">
-              <property name="text">
-               <string>Ordre</string>
-              </property>
-             </widget>
-            </item>
             <item row="5" column="1">
              <widget class="QCheckBox" name="chx_sphoto">
               <property name="text">
@@ -193,56 +273,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <layout class="QVBoxLayout" name="vl_price_minmax_2">
-              <item>
-               <widget class="QLineEdit" name="le_price_min">
-                <property name="placeholderText">
-                 <string>Min</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lbl_etou">
-                <property name="text">
-                 <string>et/ou</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="le_price_max">
-                <property name="placeholderText">
-                 <string>Max</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <layout class="QVBoxLayout" name="vl_rooms_minmax_2">
-              <item>
-               <widget class="QLineEdit" name="le_rooms_min">
-                <property name="placeholderText">
-                 <string>Min</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lbl_etou_2">
-                <property name="text">
-                 <string>et/ou</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="le_rooms_max">
-                <property name="placeholderText">
-                 <string>Max</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
            </layout>
           </widget>
          </widget>
@@ -256,7 +286,7 @@
              <x>0</x>
              <y>10</y>
              <width>201</width>
-             <height>435</height>
+             <height>437</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="form_search_rent">

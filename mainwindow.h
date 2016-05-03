@@ -38,10 +38,6 @@ protected:
 private slots:
     void on_btn_add_advert_clicked();
 
-    void on_btn_search_sale_clicked();
-
-    void on_btn_search_rent_clicked();
-
 private:
     Ui::MainWindow* ui;
     QStandardItemModel* model;

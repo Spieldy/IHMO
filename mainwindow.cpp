@@ -29,8 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    if(Save())
+    if(Save()) {
         delete ui;
+    }
     else {
         QMessageBox msgBox;
         msgBox.critical(this, "Erreur", "Problème rencontré lors de la sauvegarde");
@@ -188,6 +189,10 @@ bool MainWindow::Charge() {
                 else if (element == "sup3") {
                     advert->SetPhotoSup3(reader.readElementText());
                     advert_tab.append(advert);
+                    if (advert->GetIsSaleRent() == 0)
+                        sale_tab.append(advert);
+                    else if (advert->GetIsSaleRent() == 1)
+                        rent_tab.append(advert);
                     nb_advert = nb_advert + 1;
                     element = "immobilier";
                 }
@@ -271,18 +276,12 @@ void MainWindow::on_btn_add_advert_clicked()
         advert = advert_dlg->GetAdvert();
         new_id = new_id + 1;
         advert_tab.append(advert);
+        if (advert->GetIsSaleRent() == 0)
+            sale_tab.append(advert);
+        else if (advert->GetIsSaleRent() == 1)
+            rent_tab.append(advert);
         nb_advert = nb_advert + 1;
         FillAllAdvert();
     }
     delete advert_dlg;
-}
-
-void MainWindow::on_btn_search_sale_clicked()
-{
-
-}
-
-void MainWindow::on_btn_search_rent_clicked()
-{
-
 }
