@@ -285,3 +285,131 @@ void MainWindow::on_btn_add_advert_clicked()
     }
     delete advert_dlg;
 }
+
+void MainWindow::on_btn_search_clicked()
+{
+    CheckLE();
+    QString price_min = ui->le_price_min->text();
+    QString price_max = "";
+    QString rooms_min = "";
+    QString rooms_max = "";
+    QString type = "";
+    QString city = "";
+
+    QList<Advert*> work_tab;
+
+}
+
+bool MainWindow::isLEValide(QLineEdit *le) {
+    bool test = true;
+    int i;
+    for(i=0; i<le->text().length(); i++) {
+        if(! le->text()[i].isDigit())
+            test = false;
+    }
+    return test;
+}
+
+void MainWindow::on_le_price_min_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_price_min->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_price_min->setText(tmp);
+            }
+        }
+    }
+}
+
+void MainWindow::on_le_price_max_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_price_max->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_price_max->setText(tmp);
+            }
+        }
+    }
+}
+
+void MainWindow::on_le_rooms_min_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_rooms_min->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_rooms_min->setText(tmp);
+            }
+        }
+    }
+}
+
+void MainWindow::on_le_rooms_max_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_rooms_max->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_rooms_max->setText(tmp);
+            }
+        }
+    }
+}
+
+bool MainWindow::CheckLE() {
+    bool test = true;
+    bool test_valide = false;
+
+    QMessageBox msgBox;
+    QString error = "";
+    QString error_valide = "";
+
+    if (!test_valide) {
+        error_valide.append("Champ(s) invalide(s):\n");
+        if (!isLEValide(ui->le_price_min)) {
+            error_valide.append("       Prix min\n");
+            test_valide = true;
+        }
+        if (!isLEValide(ui->le_price_max)) {
+            error_valide.append("       Prix max\n");
+            test_valide = true;
+        }
+        if (!isLEValide(ui->le_rooms_min)) {
+            error_valide.append("       Pièces min\n");
+            test_valide = true;
+        }
+        if (!isLEValide(ui->le_rooms_max)) {
+            error_valide.append("       Pièces max\n");
+            test_valide = true;
+        }
+    }
+
+    if (test_valide) {
+        error.append(error_valide);
+        test = false;
+    }
+    if (!test) {
+        msgBox.critical(this, "Erreur", error);
+        return false;
+    }
+    else
+        return true;
+}

@@ -34,9 +34,20 @@ protected:
     QList<Advert*> saled_tab;
     QList<Advert*> rent_tab;
     QList<Advert*> rented_tab;
+    QList<Advert*> search_tab;
 
 private slots:
     void on_btn_add_advert_clicked();
+
+    void on_btn_search_clicked();
+
+    void on_le_price_min_textEdited(const QString &arg1);
+
+    void on_le_price_max_textEdited(const QString &arg1);
+
+    void on_le_rooms_min_textEdited(const QString &arg1);
+
+    void on_le_rooms_max_textEdited(const QString &arg1);
 
 private:
     Ui::MainWindow* ui;
@@ -44,6 +55,8 @@ private:
     bool Save();
     bool Charge();
     bool FillAllAdvert();
+    bool CheckLE();
+    bool isLEValide(QLineEdit *le);
     int new_id = 1;
     int nb_advert = 0;
 

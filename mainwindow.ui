@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>IHMO</string>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -114,7 +114,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="cbx_stype">
+             <widget class="QComboBox" name="cbx_type">
               <property name="editable">
                <bool>true</bool>
               </property>
@@ -222,7 +222,7 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLineEdit" name="le_scity"/>
+             <widget class="QLineEdit" name="le_city"/>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="lbl_tri_4">
@@ -267,7 +267,7 @@
              </widget>
             </item>
             <item row="6" column="1">
-             <widget class="QPushButton" name="btn_search_sale">
+             <widget class="QPushButton" name="btn_search">
               <property name="text">
                <string>Rechercher</string>
               </property>
@@ -280,161 +280,6 @@
           <attribute name="title">
            <string>Location</string>
           </attribute>
-          <widget class="QWidget" name="formLayoutWidget_3">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>10</y>
-             <width>201</width>
-             <height>437</height>
-            </rect>
-           </property>
-           <layout class="QFormLayout" name="form_search_rent">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-            </property>
-            <property name="verticalSpacing">
-             <number>28</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lbl_stype_3">
-              <property name="text">
-               <string>Type</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="cbx_rtype">
-              <property name="editable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lbl_price_3">
-              <property name="text">
-               <string>Prix</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lbl_rooms_3">
-              <property name="text">
-               <string>Pièces</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lbl_city_3">
-              <property name="text">
-               <string>Ville</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="le_rcity"/>
-            </item>
-            <item row="4" column="1">
-             <layout class="QVBoxLayout" name="verticalLayout_3">
-              <item>
-               <widget class="QRadioButton" name="rdb_last_first_2">
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Récentes -&gt; anciennes</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="rdb_first_last_2">
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Anciennes -&gt; Récentes</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lbl_tri_3">
-              <property name="text">
-               <string>Ordre</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QCheckBox" name="chx_rphoto">
-              <property name="text">
-               <string>Photo(s) obligatoire</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QPushButton" name="btn_search_rent">
-              <property name="text">
-               <string>Rechercher</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <layout class="QVBoxLayout" name="vl_price_minmax">
-              <item>
-               <widget class="QLineEdit" name="le_price_min_2">
-                <property name="placeholderText">
-                 <string>Min</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lbl_etou_5">
-                <property name="text">
-                 <string>et/ou</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="le_price_max_2">
-                <property name="placeholderText">
-                 <string>Max</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <layout class="QVBoxLayout" name="vl_rooms_minmax">
-              <item>
-               <widget class="QLineEdit" name="le_rooms_min_2">
-                <property name="placeholderText">
-                 <string>Min</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lbl_etou_6">
-                <property name="text">
-                 <string>et/ou</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="le_rooms_max_2">
-                <property name="placeholderText">
-                 <string>Max</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
          </widget>
         </widget>
        </item>
