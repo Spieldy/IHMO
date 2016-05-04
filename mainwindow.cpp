@@ -12,11 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->setupUi(this);
         ui->rdb_last_first->setChecked(true);
 
-        model = new QStandardItemModel(advert_tab.count(),7,this);
+        model = new QStandardItemModel(advert_tab.count(),8,this);
         if (FillAllAdvert(advert_tab)) {
             ui->tableView->setModel(model);
             ui->tableView->resizeRowsToContents();
             ui->tableView->resizeColumnsToContents();
+            ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         }
         else
             msgBox.critical(this, "Erreur", "Problème rencontré lors du remplissage du tableau");
@@ -45,11 +46,14 @@ bool MainWindow::FillAllAdvert(QList<Advert*> tab) {
     model->setHorizontalHeaderItem(4, new QStandardItem(QString("Adresse")));
     model->setHorizontalHeaderItem(5, new QStandardItem(QString("Taille (m2)")));
     model->setHorizontalHeaderItem(6, new QStandardItem(QString("Pièce(s)")));
+    model->setHorizontalHeaderItem(7, new QStandardItem(QString("Description")));
     for(i=0; i<tab.count(); ++i )
     {
         QStandardItem *photo = new QStandardItem();
-        QPixmap p(tab[i]->GetPhotoPrinc());;
-        photo->setData(QVariant(p.scaled(75, 75, Qt::KeepAspectRatio)), Qt::DecorationRole);
+        if (!tab[i]->GetPhotoPrinc().isEmpty()) {
+            QPixmap p(tab[i]->GetPhotoPrinc());
+            photo->setData(QVariant(p.scaled(75, 75, Qt::KeepAspectRatio)), Qt::DecorationRole);
+        }
         model->setItem(i, 0, photo);
 
         int saleRent  = tab[i]->GetIsSaleRent();
@@ -70,12 +74,14 @@ bool MainWindow::FillAllAdvert(QList<Advert*> tab) {
         model->setItem(i,5,size);
         QStandardItem *rooms = new QStandardItem(QString::number(tab[i]->GetRooms()));
         model->setItem(i,6,rooms);
-        QMessageBox msg;
+        QStandardItem *description = new QStandardItem(tab[i]->GetDescription());
+        model->setItem(i,7,description);
     }
 
     ui->tableView->resizeRowsToContents();
     ui->tableView->resizeColumnsToContents();
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     return true;
 }
@@ -107,6 +113,12 @@ bool MainWindow::Charge() {
                 //Si nous venont de trouver un contributeur, il faut chercher son nom.
                 if (element == "immobilier") {
                     advert = new Advert();
+                    element = "new_id";
+                }
+
+                else if (element == "new_id")
+                {
+                    new_advert_id = reader.readElementText().toInt(&ok, 10);
                     element = "id";
                 }
 
@@ -114,6 +126,12 @@ bool MainWindow::Charge() {
                 else if (element == "id")
                 {
                     advert->SetId(reader.readElementText().toInt(&ok, 10));
+                    element = "id_client";
+                }
+
+                else if (element == "id_client")
+                {
+                    advert->SetIdClient(reader.readElementText().toInt(&ok, 10));
                     element = "salerent";
                 }
 
@@ -235,7 +253,9 @@ bool MainWindow::Save() {
     for(int i = 0; i < advert_tab.count() && advert_tab.count() != 0; i++) {
         writer.writeStartElement("immobilier");
 
+        writer.writeTextElement("new_id", QString::number(new_advert_id));
         writer.writeTextElement("id", QString::number(advert_tab[i]->GetId()));
+        writer.writeTextElement("id_client", QString::number(advert_tab[i]->GetIdClient()));
         writer.writeTextElement("salerent", QString::number(advert_tab[i]->GetIsSaleRent()));
         writer.writeTextElement("datecreation", advert_tab[i]->GetDateCreation().toString());
         writer.writeTextElement("type", advert_tab[i]->GetType());
@@ -276,29 +296,75 @@ bool MainWindow::Save() {
 
 void MainWindow::UpdateTab() {
     int i;
+    saled_tab.clear();
+    rented_tab.clear();
     for (i = 0; i < advert_tab.count(); ++i) {
-        if (advert_tab[i]->GetIsSaleRent() == 0)
+        if (advert_tab[i]->GetIsSaleRent() == 0) {
             sale_tab.append(advert_tab[i]);
-        else if (advert_tab[i]->GetIsSaleRent() == 1)
+            if (advert_tab[i]->GetIdClient() != -1) {
+                saled_tab.append(advert_tab[i]);
+            }
+        }
+        else if (advert_tab[i]->GetIsSaleRent() == 1) {
             rent_tab.append(advert_tab[i]);
+            if (advert_tab[i]->GetIdClient() != -1) {
+                rented_tab.append(advert_tab[i]);
+            }
+        }
     }
+
+    QMessageBox msg;
+    msg.setText("NB Saled: "+QString::number(saled_tab.count()));
+    msg.exec();
+    msg.setText("NB Rented: "+QString::number(rented_tab.count()));
+    msg.exec();
 }
 
 void MainWindow::on_btn_add_advert_clicked()
 {
-    Advert_Dialog *advert_dlg = new Advert_Dialog(this, current_id);
+    Advert_Dialog *advert_dlg = new Advert_Dialog(this, new_advert_id);
     Advert *advert;
     if (advert_dlg->exec() == QDialog::Accepted) {
         advert = advert_dlg->GetAdvert();
-        current_id++;
+        new_advert_id++;
+        if (advert_dlg->hasClient()) {
+            Client* client;
+            if (!isKnownClient(advert_dlg->GetClient())) {
+                client = advert_dlg->GetClient();
+                client->SetId(new_client_id);
+                client_tab.append(client);
+                advert->SetIdClient(client->GetId());
+                new_client_id++;
+            } else {
+                client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                advert->SetIdClient(client->GetId());
+            }
+        }
         advert_tab.append(advert);
         UpdateTab();
-        QMessageBox msg;
-        msg.setText(QString::number(sale_tab.count()));
-        msg.exec();
         FillAllAdvert(advert_tab);
     }
     delete advert_dlg;
+}
+
+bool MainWindow::isKnownClient(Client* client) {
+    int test = false;
+    int i;
+    for(i = 0; i < client_tab.count() && !test;i++) {
+        if(client->GetName() == client_tab[i]->GetName() && client->GetSurname() == client_tab[i]->GetSurname())
+            test = true;
+    }
+    return test;
+}
+
+int MainWindow::GetIndexClient(int id_client) {
+    int indice = 0;
+    int i;
+    for(i = 0; i < client_tab.count();i++) {
+        if(id_client == client_tab[i]->GetId())
+            indice = i;
+    }
+    return indice;
 }
 
 void MainWindow::on_btn_search_clicked()
@@ -640,12 +706,67 @@ void MainWindow::on_le_size_max_textEdited(const QString &arg1)
 
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
+    QMessageBox msg;
+    int i;
+    int indexClient = 0;
+    bool findClient = false;
+    Client* client;
+    for (i = 0; i < client_tab.count() && !findClient; i++) {
+        if (client_tab[i]->GetId() == advert_tab[index.row()]->GetIdClient()) {
+            findClient = true;
+            indexClient = i;
+        }
+    }
+    if (findClient) {
+        msg.setText("Index client trouvée: "+QString::number(indexClient) + "id " +QString::number(client_tab[indexClient]->GetId()));
+        msg.exec();
+       Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], advert_tab[index.row()]);
        if (advert_dlg->exec() == QDialog::Accepted){
            advert_tab[index.row()] = advert_dlg->GetAdvert();
+           UpdateTab();
+           if (advert_dlg->hasClient()) {
+               if (!isKnownClient(advert_dlg->GetClient())) {
+                   client = advert_dlg->GetClient();
+                   client->SetId(new_client_id);
+                   client_tab.append(client);
+                   advert_tab[index.row()]->SetIdClient(client->GetId());
+                   new_client_id++;
+               } else {
+                   client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                   advert_tab[index.row()]->SetIdClient(client->GetId());
+               }
+           } else {
+               advert_tab[index.row()]->SetIdClient(-1);
+           }
+           UpdateTab();
            FillAllAdvert(advert_tab);
        }
        delete advert_dlg;
+    } else {
+       Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
+       if (advert_dlg->exec() == QDialog::Accepted){
+           advert_tab[index.row()] = advert_dlg->GetAdvert();
+           UpdateTab();
+           if (advert_dlg->hasClient()) {
+               if (!isKnownClient(advert_dlg->GetClient())) {
+                   client = advert_dlg->GetClient();
+                   client->SetId(new_client_id);
+                   client_tab.append(client);
+                   advert_tab[index.row()]->SetIdClient(client->GetId());
+                   new_client_id++;
+               } else {
+                   client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                   advert_tab[index.row()]->SetIdClient(client->GetId());
+               }
+           } else {
+               advert_tab[index.row()]->SetIdClient(-1);
+           }
+           UpdateTab();
+           FillAllAdvert(advert_tab);
+       }
+       delete advert_dlg;
+    }
+
 }
 
 void MainWindow::on_tableView_clicked(const QModelIndex &index)
@@ -661,4 +782,11 @@ void MainWindow::on_btn_suppress_add_clicked()
             advert_tab.removeAt(rowToSuppress.at(i).row());
         }
         FillAllAdvert(advert_tab);
+}
+
+void MainWindow::on_btn_statistic_clicked()
+{
+    //Statistic_Dialog* stat_dlg = new Statistic_Dialog(this);
+    //stat_dlg->exec();
+    //delete stat_dlg;
 }

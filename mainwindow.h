@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include "advert.h"
+#include "client.h"
 #include "advert_dialog.h"
 #include <iostream>
 #include <Qdir>
@@ -30,12 +31,12 @@ public:
 
 protected:
     QList<Advert*> advert_tab;
-    QList<Advert*> last_advert_tab;
     QList<Advert*> sale_tab;
     QList<Advert*> saled_tab;
     QList<Advert*> rent_tab;
     QList<Advert*> rented_tab;
     QList<Advert*> search_tab;
+    QList<Client*> client_tab;
 
 private slots:
     void on_btn_add_advert_clicked();
@@ -60,6 +61,8 @@ private slots:
 
     void on_btn_suppress_add_clicked();
 
+    void on_btn_statistic_clicked();
+
 private:
     Ui::MainWindow* ui;
     QStandardItemModel* model;
@@ -68,8 +71,12 @@ private:
     bool FillAllAdvert(QList<Advert*> tab);
     bool CheckLE();
     bool isLEValide(QLineEdit *le);
+    bool isKnownClient(Client* client);
+    int GetIndexClient(int id_client);
     void UpdateTab();
-    int current_id = 0;
+    int new_advert_id = 0;
+    int new_client_id = 0;
+
 
 };
 

@@ -24,6 +24,7 @@ class Advert
     int price;
     int id;
     int isSaleRent;
+    int id_client;
 public:
     Advert();
     Advert(QString type, QString num, QString street, QString city, QString zip, QString description, int isSaleRent, int size, int rooms, int price);
@@ -59,6 +60,8 @@ public:
     void SetRooms(int rooms);
     int GetPrice();
     void SetPrice(int price);
+    int GetIdClient();
+    void SetIdClient(int value);
 };
 
 #endif // ADVERT_H

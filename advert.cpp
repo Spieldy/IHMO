@@ -1,6 +1,8 @@
 #include "advert.h"
 
-Advert::Advert() {}
+Advert::Advert() {
+    id_client = -1;
+}
 
 Advert::Advert(QString type, QString num, QString street, QString city, QString zip, QString description, int isSaleRent, int size, int rooms, int price)
 {
@@ -142,4 +144,14 @@ int Advert::GetPrice() {
 
 void Advert::SetPrice(int price) {
     this->price = price;
+}
+
+int Advert::GetIdClient()
+{
+    return id_client;
+}
+
+void Advert::SetIdClient(int value)
+{
+    id_client = value;
 }

@@ -4,20 +4,21 @@
 #include <QLineEdit>
 
 
-Advert_Dialog::Advert_Dialog(QMainWindow *parent, int id) :
+Advert_Dialog::Advert_Dialog(QMainWindow *parent, int id_advert) :
     QDialog(parent), ui(new Ui::Dialog)
 {
     ui->setupUi(this);
     advert = new Advert();
-    this->id = id;
+    client = new Client();
+    advert->SetId(id_advert);
 }
 
-Advert_Dialog::Advert_Dialog(QMainWindow *parent, Advert* advert, int id) :
+Advert_Dialog::Advert_Dialog(QMainWindow *parent, Advert* advert) :
     QDialog(parent), ui(new Ui::Dialog)
 {
     ui->setupUi(this);
     this->advert = advert;
-    this->id = id;
+    client = new Client();
 
     QString types[6];
     types[0] = QString("Maison");
@@ -102,6 +103,103 @@ Advert_Dialog::Advert_Dialog(QMainWindow *parent, Advert* advert, int id) :
     }
 }
 
+Advert_Dialog::Advert_Dialog(QMainWindow *parent, Client* client, Advert* advert) :
+    QDialog(parent), ui(new Ui::Dialog)
+{
+    ui->setupUi(this);
+    this->advert = advert;
+    this->client = client;
+
+    QString types[6];
+    types[0] = QString("Maison");
+    types[1] = QString("Appartement");
+    types[2] = QString("Bureau");
+    types[3] = QString("Commerce");
+    types[4] = QString("Ferme");
+    types[5] = QString("Château");
+    int selectedIndex = 0;
+
+    for (int i = 0; i < 6 ; i++){
+        if (types[i].compare(this->advert->GetType()) == 0){
+            selectedIndex = i;
+        }
+    }
+    ui->cbx_type->setCurrentIndex(selectedIndex);
+
+
+    ui->le_num->setText(this->advert->GetNum());
+    ui->le_street->setText((this->advert->GetStreet()));
+    ui->le_city->setText(this->advert->GetCity());
+    ui->le_zip->setText(this->advert->GetZip());
+    ui->te_description->setText(this->advert->GetDescription());
+
+    QPixmap* p;
+    if (!advert->GetPhotoPrinc().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoPrinc());
+        photo_princ = new QLabel();
+        photo_princ->setObjectName("lbl_show_princ");
+        photo_princ->resize(75, 75);
+        photo_princ->setPixmap(p->scaled(photo_princ->width(),photo_princ->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_princ->addWidget(photo_princ);
+        nb_photo_princ++;
+    }
+
+    if(!advert->GetPhotoSup1().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoSup1());
+
+        photo_sup1 = new QLabel();
+        photo_sup1->setObjectName("lbl_show_sup1");
+        photo_sup1->resize(75, 75);
+        photo_sup1->setPixmap(p->scaled(photo_sup1->width(),photo_sup1->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_sup->addWidget(photo_sup1);
+
+        nb_photo_supp++;
+    }
+
+    if(!advert->GetPhotoSup2().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoSup2());
+
+        photo_sup2 = new QLabel();
+        photo_sup2->setObjectName("lbl_show_sup2");
+        photo_sup2->resize(75, 75);
+        photo_sup2->setPixmap(p->scaled(photo_sup2->width(),photo_sup2->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_sup->addWidget(photo_sup2);
+
+        nb_photo_supp++;
+    }
+
+    if(!advert->GetPhotoSup3().isEmpty()) {
+        p = new QPixmap(advert->GetPhotoSup3());
+
+        photo_sup3 = new QLabel();
+        photo_sup3->setObjectName("lbl_show_sup3");
+        photo_sup3->resize(75, 75);
+        photo_sup3->setPixmap(p->scaled(photo_sup3->width(),photo_sup3->height(),Qt::KeepAspectRatio));
+        ui->hl_photo_sup->addWidget(photo_sup3);
+
+        nb_photo_supp++;
+    }
+
+    ui->le_size->setText(QString::number(this->advert->GetSize()));
+    ui->spb_rooms->setValue(this->advert->GetRooms());
+    ui->le_price->setText(QString::number(this->advert->GetPrice()));
+
+    if (this->advert->GetIsSaleRent() == 1){
+        ui->rdb_rent->setChecked(true);
+        ui->rdb_sale->setChecked(false);
+    }else{
+        ui->rdb_rent->setChecked(false);
+        ui->rdb_sale->setChecked(true);
+    }
+
+    ui->le_client_name->setText(client->GetName());
+    ui->le_client_surname->setText(client->GetSurname());
+    if (!client->GetTel().isEmpty())
+        ui->le_client_tel->setText(client->GetTel());
+    if (!client->GetMail().isEmpty())
+        ui->le_client_mail->setText(client->GetMail());
+}
+
 Advert_Dialog::~Advert_Dialog()
 {
     delete ui;
@@ -116,7 +214,6 @@ Advert* Advert_Dialog::GetAdvert() {
     QString type = ui->cbx_type->currentText();
     type.toLower();
     type[0].toUpper();
-    advert->SetId(id);
     advert->SetDateCreation(QDate::currentDate());
     advert->SetType(type);
     advert->SetNum(ui->le_num->text());
@@ -131,6 +228,22 @@ Advert* Advert_Dialog::GetAdvert() {
     advert->SetSize(ui->le_size->text().toInt());
 
     return advert;
+}
+
+Client* Advert_Dialog::GetClient() {
+    client->SetId(id_client);
+    client->SetName(ui->le_client_name->text().toLower());
+    client->SetSurname(ui->le_client_surname->text().toLower());
+    client->SetTel(ui->le_client_tel->text());
+    client->SetMail(ui->le_client_mail->text().toLower());
+    return client;
+}
+
+bool Advert_Dialog::hasClient() {
+    if (!ui->le_client_name->text().isEmpty() && !ui->le_client_surname->text().isEmpty() && (!ui->le_client_tel->text().isEmpty() || !ui->le_client_mail->text().isEmpty()))
+        return true;
+    else
+        return false;
 }
 
 void Advert_Dialog::on_le_size_textEdited(const QString &arg1)
@@ -210,11 +323,23 @@ void Advert_Dialog::on_btn_ok_clicked()
             error_empty.append("        Code\n");
             test_empty = true;
         }
+        if ((!ui->le_client_name->text().isEmpty() && ui->le_client_surname->text().isEmpty()) || (ui->le_client_name->text().isEmpty() && !ui->le_client_surname->text().isEmpty())) {
+            error_empty.append("    Nom et prénom obligatoires\n");
+            test_empty = true;
+        }
+        if ((ui->le_client_name->text().isEmpty() || ui->le_client_surname->text().isEmpty()) && (!ui->le_client_tel->text().isEmpty() || !ui->le_client_mail->text().isEmpty())) {
+            error_empty.append("    Nom et prénom obligatoires\n");
+            test_empty = true;
+        }
+        if (!ui->le_client_name->text().isEmpty() && !ui->le_client_surname->text().isEmpty() && (ui->le_client_tel->text().isEmpty() && ui->le_client_mail->text().isEmpty())) {
+            error_empty.append("    1 contact obligatoire\n");
+            test_empty = true;
+        }
     }
 
     if (!test_valide) {
         error_valide.append("Champ(s) invalide(s):\n");
-        if (!isLEValide(ui->le_size)) {
+        if (!isLEDigitValide(ui->le_size)) {
             error_valide.append("       Superficie/Surface\n");
             test_valide = true;
         }
@@ -222,8 +347,24 @@ void Advert_Dialog::on_btn_ok_clicked()
             error_valide.append("       Nombre de pièces\n");
             test_valide = true;
         }
-        if (!isLEValide(ui->le_price)) {
+        if (!isLEDigitValide(ui->le_price)) {
             error_valide.append("       Prix\n");
+            test_valide = true;
+        }
+        if (!isLECharValide(ui->le_client_name)){
+            error_valide.append("       Nom\n");
+            test_valide = true;
+        }
+        if (!isLECharValide(ui->le_client_surname)){
+            error_valide.append("       Prénom\n");
+            test_valide = true;
+        }
+        if (!isLEDigitValide(ui->le_client_tel)) {
+            error_valide.append("       Téléphone\n");
+            test_valide = true;
+        }
+        if (!ui->le_client_name->text().isEmpty() && !ui->le_client_surname->text().isEmpty() && ui->le_client_tel->text().length() > 0 && ui->le_client_tel->text().length() < 10) {
+            error_valide.append("       Téléphone(10 chiffres minimum)\n");
             test_valide = true;
         }
     }
@@ -243,7 +384,7 @@ void Advert_Dialog::on_btn_ok_clicked()
         this->accept();
 }
 
-bool Advert_Dialog::isLEValide(QLineEdit *le) {
+bool Advert_Dialog::isLEDigitValide(QLineEdit *le) {
     bool test = true;
     int i;
     for(i=0; i<le->text().length(); i++) {
@@ -252,6 +393,17 @@ bool Advert_Dialog::isLEValide(QLineEdit *le) {
     }
     return test;
 }
+
+bool Advert_Dialog::isLECharValide(QLineEdit *le) {
+    bool test = true;
+    int i;
+    for(i=0; i<le->text().length(); i++) {
+        if(le->text()[i].isDigit())
+            test = false;
+    }
+    return test;
+}
+
 
 void Advert_Dialog::on_btn_cancel_clicked()
 {
@@ -356,5 +508,53 @@ void Advert_Dialog::on_btn_suppr_sup_clicked()
         ui->hl_photo_sup->removeWidget(photo_sup1);
         advert->SetPhotoSup1("");
         nb_photo_supp--;
+    }
+}
+
+void Advert_Dialog::on_le_client_name_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(arg1[i].isDigit())
+        {
+            if(ui->le_client_name->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_client_name->setText(tmp);
+            }
+        }
+    }
+}
+
+void Advert_Dialog::on_le_client_surname_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(arg1[i].isDigit())
+        {
+            if(ui->le_client_surname->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_client_surname->setText(tmp);
+            }
+        }
+    }
+}
+
+void Advert_Dialog::on_le_client_tel_textEdited(const QString &arg1)
+{
+    int i;
+    for(i=0; i<arg1.length(); i++)
+    {
+        if(! arg1[i].isDigit())
+        {
+            if(ui->le_client_tel->isUndoAvailable()) {
+                QString tmp = arg1;
+                tmp.remove(arg1.length()-1, 1);
+                ui->le_client_tel->setText(tmp);
+            }
+        }
     }
 }

@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     advert_dialog.cpp \
-    advert.cpp
+    advert.cpp \
+    client.cpp
 
 HEADERS  += mainwindow.h \
     advert_dialog.h \
-    advert.h
+    advert.h \
+    client.h
 
 FORMS    += mainwindow.ui \
     advert.ui
