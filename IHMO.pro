@@ -16,12 +16,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     advert_dialog.cpp \
     advert.cpp \
-    client.cpp
+    client.cpp \
+    statistic_dialog.cpp \
+    clients_dialog.cpp
 
 HEADERS  += mainwindow.h \
     advert_dialog.h \
     advert.h \
-    client.h
+    client.h \
+    statistic_dialog.h \
+    clients_dialog.h
 
 FORMS    += mainwindow.ui \
-    advert.ui
+    advert.ui \
+    statistic.ui \
+    clients.ui

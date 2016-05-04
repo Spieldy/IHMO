@@ -5,7 +5,7 @@
 
 
 Advert_Dialog::Advert_Dialog(QMainWindow *parent, int id_advert) :
-    QDialog(parent), ui(new Ui::Dialog)
+    QDialog(parent), ui(new Ui::AdvertDialog)
 {
     ui->setupUi(this);
     advert = new Advert();
@@ -14,7 +14,7 @@ Advert_Dialog::Advert_Dialog(QMainWindow *parent, int id_advert) :
 }
 
 Advert_Dialog::Advert_Dialog(QMainWindow *parent, Advert* advert) :
-    QDialog(parent), ui(new Ui::Dialog)
+    QDialog(parent), ui(new Ui::AdvertDialog)
 {
     ui->setupUi(this);
     this->advert = advert;
@@ -104,7 +104,7 @@ Advert_Dialog::Advert_Dialog(QMainWindow *parent, Advert* advert) :
 }
 
 Advert_Dialog::Advert_Dialog(QMainWindow *parent, Client* client, Advert* advert) :
-    QDialog(parent), ui(new Ui::Dialog)
+    QDialog(parent), ui(new Ui::AdvertDialog)
 {
     ui->setupUi(this);
     this->advert = advert;

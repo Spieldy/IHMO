@@ -6,12 +6,14 @@
 #include "advert.h"
 #include "client.h"
 #include "advert_dialog.h"
+#include "statistic_dialog.h"
 #include <iostream>
 #include <Qdir>
 #include <QList>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <limits>
+#include "clients_dialog.h"
 
 
 using namespace std;
@@ -63,6 +65,8 @@ private slots:
 
     void on_btn_statistic_clicked();
 
+    void on_btn_clients_clicked();
+
 private:
     Ui::MainWindow* ui;
     QStandardItemModel* model;
@@ -72,6 +76,7 @@ private:
     bool CheckLE();
     bool isLEValide(QLineEdit *le);
     bool isKnownClient(Client* client);
+    bool isInSearch = false;
     int GetIndexClient(int id_client);
     void UpdateTab();
     int new_advert_id = 0;

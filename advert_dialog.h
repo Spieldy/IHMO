@@ -41,7 +41,7 @@ public:
     Client* GetClient();
     bool hasClient();
 
-    Ui::Dialog *ui;
+    Ui::AdvertDialog *ui;
 
 signals:
 

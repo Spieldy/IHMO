@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IHMO>
+    <clients>
+        <client>
+            <new_id>2</new_id>
+            <id>0</id>
+            <name>spieldenner</name>
+            <surname>jérémy</surname>
+            <telephone></telephone>
+            <mail>mail.com</mail>
+        </client>
+        <client>
+            <new_id>2</new_id>
+            <id>1</id>
+            <name>schmitt</name>
+            <surname>dylan</surname>
+            <telephone></telephone>
+            <mail>mail.com</mail>
+        </client>
+    </clients>
+</IHMO>

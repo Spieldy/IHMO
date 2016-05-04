@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IHMO>
+    <advert>
+        <immobilier>
+            <new_id>2</new_id>
+            <id>0</id>
+            <id_client>0</id_client>
+            <salerent>0</salerent>
+            <datecreation>mer. mai 4 2016</datecreation>
+            <type>Maison</type>
+            <size>123</size>
+            <room>3</room>
+            <address>
+                <num>12</num>
+                <street>rue des balayeurs</street>
+                <city>Strasbourg</city>
+                <zip>67000</zip>
+            </address>
+            <description>Superbe maison</description>
+            <price>1233</price>
+            <photo>
+                <principal></principal>
+                <sup1></sup1>
+                <sup2></sup2>
+                <sup3></sup3>
+            </photo>
+        </immobilier>
+        <immobilier>
+            <new_id>2</new_id>
+            <id>1</id>
+            <id_client>1</id_client>
+            <salerent>1</salerent>
+            <datecreation>mer. mai 4 2016</datecreation>
+            <type>Appartement</type>
+            <size>34</size>
+            <room>4</room>
+            <address>
+                <num>16</num>
+                <street>rue des balayeurs</street>
+                <city>Strasbourg</city>
+                <zip>67000</zip>
+            </address>
+            <description>appartement</description>
+            <price>450</price>
+            <photo>
+                <principal></principal>
+                <sup1></sup1>
+                <sup2></sup2>
+                <sup3></sup3>
+            </photo>
+        </immobilier>
+    </advert>
+</IHMO>

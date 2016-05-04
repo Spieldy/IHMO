@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->setupUi(this);
         ui->rdb_last_first->setChecked(true);
 
-        model = new QStandardItemModel(advert_tab.count(),8,this);
+        model = new QStandardItemModel(advert_tab.count(),9,this);
         if (FillAllAdvert(advert_tab)) {
             ui->tableView->setModel(model);
             ui->tableView->resizeRowsToContents();
@@ -47,6 +47,7 @@ bool MainWindow::FillAllAdvert(QList<Advert*> tab) {
     model->setHorizontalHeaderItem(5, new QStandardItem(QString("Taille (m2)")));
     model->setHorizontalHeaderItem(6, new QStandardItem(QString("Pièce(s)")));
     model->setHorizontalHeaderItem(7, new QStandardItem(QString("Description")));
+    model->setHorizontalHeaderItem(8, new QStandardItem(QString("Date d'ajout")));
     for(i=0; i<tab.count(); ++i )
     {
         QStandardItem *photo = new QStandardItem();
@@ -76,6 +77,8 @@ bool MainWindow::FillAllAdvert(QList<Advert*> tab) {
         model->setItem(i,6,rooms);
         QStandardItem *description = new QStandardItem(tab[i]->GetDescription());
         model->setItem(i,7,description);
+        QStandardItem *date_creation = new QStandardItem(tab[i]->GetDateCreation().toString());
+        model->setItem(i,8,date_creation);
     }
 
     ui->tableView->resizeRowsToContents();
@@ -88,7 +91,7 @@ bool MainWindow::FillAllAdvert(QList<Advert*> tab) {
 
 bool MainWindow::Charge() {
     QXmlStreamReader reader; // Objet servant à la lecture du fichier Xml
-    QString fileXmlName = QDir::currentPath() +"/saves.xml";
+    QString fileXmlName = QDir::currentPath() +"/advert.xml";
     QFile fileXml(fileXmlName);
 
     // Ouverture du fichier XML en lecture seule et en mode texte (Sort de la fonction si le fichier ne peut etre ouvert).
@@ -100,7 +103,6 @@ bool MainWindow::Charge() {
 
     QString element = "immobilier";
     bool ok;
-    QMessageBox msg;
     Advert* advert;
     reader.readNext();
     while (!reader.atEnd())
@@ -224,12 +226,85 @@ bool MainWindow::Charge() {
         reader.readNext(); // On va au prochain élément
     }
     fileXml.close();
+
+
+    QXmlStreamReader reader2;
+    QString fileXmlName2 = QDir::currentPath() +"/client.xml";
+    QFile fileXml2(fileXmlName);
+
+    // Ouverture du fichier XML en lecture seule et en mode texte (Sort de la fonction si le fichier ne peut etre ouvert).
+    if (!fileXml2.open(QFile::ReadOnly | QFile::Text))
+        return false;
+
+    // Initialise l'instance reader avec le flux XML venant de file
+    reader2.setDevice(&fileXml2);
+
+    QString element2 = "client";
+    bool ok2;
+    Client* client;
+    QMessageBox msg;
+    reader2.readNext();
+    while (!reader2.atEnd())
+    {
+        if (reader2.isStartElement())
+        {
+            //Si l'element2 est celui recherché
+            if(reader2.name() == element2)
+            {
+                if (element2 == "client") {
+                    client = new Client();
+                    element2 = "new_id";
+                }
+
+                else if (element2 == "new_id")
+                {
+                    new_client_id = reader2.readElementText().toInt(&ok2, 10);
+                    element2 = "id";
+                }
+
+                else if (element2 == "id")
+                {
+                    client->SetId(reader2.readElementText().toInt(&ok2, 10));
+                    element2 = "name";
+                }
+
+                else if (element2 == "name")
+                {
+                    client->SetName(reader2.readElementText());
+                    element2 = "surname";
+                }
+
+                else if (element2 == "surname")
+                {
+                    client->SetSurname(reader2.readElementText());
+                    element2 = "telephone";
+                }
+
+                else if (element2 == "telephone")
+                {
+                    client->SetTel(reader2.readElementText());
+                    element2 = "mail";
+                }
+
+                else if (element2 == "mail")
+                {
+                    client->SetMail(reader2.readElementText());
+                    client_tab.append(client);
+                    msg.setText(QString::number(client_tab.count()));
+                    msg.exec();
+                    element2 = "client";
+                }
+            }
+        }
+        reader2.readNext(); // On va au prochain élément
+    }
+    fileXml2.close();
     return true;
 }
 
 bool MainWindow::Save() {
 
-    QString fileXmlName = QDir::currentPath() + "/saves.xml";
+    QString fileXmlName = QDir::currentPath() + "/advert.xml";
 
     QFile fileXml(fileXmlName);
 
@@ -291,6 +366,50 @@ bool MainWindow::Save() {
 
     // Fermer le fichier pour bien enregistrer le document et ferme l'élément root
     fileXml.close();
+
+
+
+    QString fileXmlName2 = QDir::currentPath() + "/client.xml";
+
+    QFile fileXml2(fileXmlName2);
+
+    // Ouverture du fichier en écriture et en texte. (sort de la fonction si le fichier ne s'ouvre pas)
+    if(!fileXml2.open(QFile::WriteOnly | QFile::Text))
+        return false;
+    QXmlStreamWriter writer2(&fileXml2);
+
+    // Active l'indentation automatique du fichier XML pour une meilleur visibilité
+    writer2.setAutoFormatting(true);
+
+    // Insert la norme de codification du fichier XML :
+    writer2.writeStartDocument();
+
+    // Élément racine du fichier XML
+    writer2.writeStartElement("IHMO");
+
+    writer2.writeStartElement("clients");
+
+    // Parcours tableau d'annonce pour sauvegarde
+    for(int i = 0; i < client_tab.count() && client_tab.count() != 0; i++) {
+        writer2.writeStartElement("client");
+        writer2.writeTextElement("new_id", QString::number(new_advert_id));
+        writer2.writeTextElement("id", QString::number(client_tab[i]->GetId()));
+        writer2.writeTextElement("name", client_tab[i]->GetName());
+        writer2.writeTextElement("surname", client_tab[i]->GetSurname());
+        writer2.writeTextElement("telephone", client_tab[i]->GetTel());
+        writer2.writeTextElement("mail", client_tab[i]->GetMail());
+        writer2.writeEndElement();
+
+    }
+    // Fermer l'ecriture de l'element <advert>
+    writer2.writeEndElement();
+
+    // Finalise le document XML
+    writer2.writeEndDocument();
+
+    // Fermer le fichier pour bien enregistrer le document et ferme l'élément root
+    fileXml2.close();
+
     return true;
 }
 
@@ -300,24 +419,20 @@ void MainWindow::UpdateTab() {
     rented_tab.clear();
     for (i = 0; i < advert_tab.count(); ++i) {
         if (advert_tab[i]->GetIsSaleRent() == 0) {
-            sale_tab.append(advert_tab[i]);
             if (advert_tab[i]->GetIdClient() != -1) {
                 saled_tab.append(advert_tab[i]);
+            } else {
+                sale_tab.append(advert_tab[i]);
             }
         }
         else if (advert_tab[i]->GetIsSaleRent() == 1) {
-            rent_tab.append(advert_tab[i]);
             if (advert_tab[i]->GetIdClient() != -1) {
                 rented_tab.append(advert_tab[i]);
+            } else {
+                rent_tab.append(advert_tab[i]);
             }
         }
     }
-
-    QMessageBox msg;
-    msg.setText("NB Saled: "+QString::number(saled_tab.count()));
-    msg.exec();
-    msg.setText("NB Rented: "+QString::number(rented_tab.count()));
-    msg.exec();
 }
 
 void MainWindow::on_btn_add_advert_clicked()
@@ -405,6 +520,8 @@ void MainWindow::on_btn_search_clicked()
         int size_min;
         int size_max;
 
+        bool lastFirst = ui->rdb_last_first->isChecked();
+        bool firstLast = ui->rdb_first_last->isChecked();
         bool ok;
         int i;
 
@@ -545,6 +662,31 @@ void MainWindow::on_btn_search_clicked()
                 }
             }
         }
+
+        for (int i = 0 ; i < search_tab.count(); i++){
+            int min = i;
+            for (int j = i + 1; j < search_tab.count(); j++){
+                if (search_tab[j]->GetDateCreation().operator <(search_tab[min]->GetDateCreation())){
+                    min = j;
+                }
+            }
+            Advert *tmp = search_tab[min];
+            search_tab[min] = search_tab[i];
+            search_tab[i] = tmp;
+        }
+        //Récente ancienne
+        if (lastFirst){
+            //Nothing
+        }
+        //Ancienne récente
+        else if (firstLast){
+            QList<Advert*> tmp_tab;
+            for (int i = search_tab.count()-1; i >= 0; i--){
+                tmp_tab.append(search_tab[i]);
+            }
+            search_tab = tmp_tab;
+        }
+        isInSearch = true;
         FillAllAdvert(search_tab);
     }
 }
@@ -706,65 +848,128 @@ void MainWindow::on_le_size_max_textEdited(const QString &arg1)
 
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    QMessageBox msg;
-    int i;
-    int indexClient = 0;
-    bool findClient = false;
-    Client* client;
-    for (i = 0; i < client_tab.count() && !findClient; i++) {
-        if (client_tab[i]->GetId() == advert_tab[index.row()]->GetIdClient()) {
-            findClient = true;
-            indexClient = i;
+    if (isInSearch) {
+        QMessageBox msg;
+        int i;
+        int indexClient = 0;
+        bool findClient = false;
+        Client* client;
+        for (i = 0; i < client_tab.count() && !findClient; i++) {
+            if (client_tab[i]->GetId() == search_tab[index.row()]->GetIdClient()) {
+                findClient = true;
+                indexClient = i;
+            }
         }
-    }
-    if (findClient) {
-        msg.setText("Index client trouvée: "+QString::number(indexClient) + "id " +QString::number(client_tab[indexClient]->GetId()));
-        msg.exec();
-       Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], advert_tab[index.row()]);
-       if (advert_dlg->exec() == QDialog::Accepted){
-           advert_tab[index.row()] = advert_dlg->GetAdvert();
-           UpdateTab();
-           if (advert_dlg->hasClient()) {
-               if (!isKnownClient(advert_dlg->GetClient())) {
-                   client = advert_dlg->GetClient();
-                   client->SetId(new_client_id);
-                   client_tab.append(client);
-                   advert_tab[index.row()]->SetIdClient(client->GetId());
-                   new_client_id++;
+        if (findClient) {
+            msg.setText("Index client trouvée: "+QString::number(indexClient) + "id " +QString::number(client_tab[indexClient]->GetId()));
+            msg.exec();
+           Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], search_tab[index.row()]);
+           if (advert_dlg->exec() == QDialog::Accepted){
+               search_tab[index.row()] = advert_dlg->GetAdvert();
+               UpdateTab();
+               if (advert_dlg->hasClient()) {
+                   if (!isKnownClient(advert_dlg->GetClient())) {
+                       client = advert_dlg->GetClient();
+                       client->SetId(new_client_id);
+                       client_tab.append(client);
+                       search_tab[index.row()]->SetIdClient(client->GetId());
+                       new_client_id++;
+                   } else {
+                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                       search_tab[index.row()]->SetIdClient(client->GetId());
+                   }
                } else {
-                   client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
-                   advert_tab[index.row()]->SetIdClient(client->GetId());
+                   search_tab[index.row()]->SetIdClient(-1);
                }
-           } else {
-               advert_tab[index.row()]->SetIdClient(-1);
+               UpdateTab();
+               FillAllAdvert(search_tab);
            }
-           UpdateTab();
-           FillAllAdvert(advert_tab);
-       }
-       delete advert_dlg;
+           delete advert_dlg;
+        } else {
+           Advert_Dialog *advert_dlg = new Advert_Dialog(this, search_tab[index.row()]);
+           if (advert_dlg->exec() == QDialog::Accepted){
+               search_tab[index.row()] = advert_dlg->GetAdvert();
+               UpdateTab();
+               if (advert_dlg->hasClient()) {
+                   if (!isKnownClient(advert_dlg->GetClient())) {
+                       client = advert_dlg->GetClient();
+                       client->SetId(new_client_id);
+                       client_tab.append(client);
+                       search_tab[index.row()]->SetIdClient(client->GetId());
+                       new_client_id++;
+                   } else {
+                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                       search_tab[index.row()]->SetIdClient(client->GetId());
+                   }
+               } else {
+                   search_tab[index.row()]->SetIdClient(-1);
+               }
+               UpdateTab();
+               FillAllAdvert(search_tab);
+           }
+           delete advert_dlg;
+        }
     } else {
-       Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
-       if (advert_dlg->exec() == QDialog::Accepted){
-           advert_tab[index.row()] = advert_dlg->GetAdvert();
-           UpdateTab();
-           if (advert_dlg->hasClient()) {
-               if (!isKnownClient(advert_dlg->GetClient())) {
-                   client = advert_dlg->GetClient();
-                   client->SetId(new_client_id);
-                   client_tab.append(client);
-                   advert_tab[index.row()]->SetIdClient(client->GetId());
-                   new_client_id++;
+        QMessageBox msg;
+        int i;
+        int indexClient = 0;
+        bool findClient = false;
+        Client* client;
+        for (i = 0; i < client_tab.count() && !findClient; i++) {
+            if (client_tab[i]->GetId() == advert_tab[index.row()]->GetIdClient()) {
+                findClient = true;
+                indexClient = i;
+            }
+        }
+        if (findClient) {
+            msg.setText("Index client trouvée: "+QString::number(indexClient) + "id " +QString::number(client_tab[indexClient]->GetId()));
+            msg.exec();
+           Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], advert_tab[index.row()]);
+           if (advert_dlg->exec() == QDialog::Accepted){
+               advert_tab[index.row()] = advert_dlg->GetAdvert();
+               UpdateTab();
+               if (advert_dlg->hasClient()) {
+                   if (!isKnownClient(advert_dlg->GetClient())) {
+                       client = advert_dlg->GetClient();
+                       client->SetId(new_client_id);
+                       client_tab.append(client);
+                       advert_tab[index.row()]->SetIdClient(client->GetId());
+                       new_client_id++;
+                   } else {
+                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                       advert_tab[index.row()]->SetIdClient(client->GetId());
+                   }
                } else {
-                   client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
-                   advert_tab[index.row()]->SetIdClient(client->GetId());
+                   advert_tab[index.row()]->SetIdClient(-1);
                }
-           } else {
-               advert_tab[index.row()]->SetIdClient(-1);
+               UpdateTab();
+               FillAllAdvert(advert_tab);
            }
-           UpdateTab();
-           FillAllAdvert(advert_tab);
-       }
-       delete advert_dlg;
+           delete advert_dlg;
+        } else {
+           Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
+           if (advert_dlg->exec() == QDialog::Accepted){
+               advert_tab[index.row()] = advert_dlg->GetAdvert();
+               UpdateTab();
+               if (advert_dlg->hasClient()) {
+                   if (!isKnownClient(advert_dlg->GetClient())) {
+                       client = advert_dlg->GetClient();
+                       client->SetId(new_client_id);
+                       client_tab.append(client);
+                       advert_tab[index.row()]->SetIdClient(client->GetId());
+                       new_client_id++;
+                   } else {
+                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                       advert_tab[index.row()]->SetIdClient(client->GetId());
+                   }
+               } else {
+                   advert_tab[index.row()]->SetIdClient(-1);
+               }
+               UpdateTab();
+               FillAllAdvert(advert_tab);
+           }
+           delete advert_dlg;
+        }
     }
 
 }
@@ -786,7 +991,18 @@ void MainWindow::on_btn_suppress_add_clicked()
 
 void MainWindow::on_btn_statistic_clicked()
 {
-    //Statistic_Dialog* stat_dlg = new Statistic_Dialog(this);
-    //stat_dlg->exec();
-    //delete stat_dlg;
+    Statistic_Dialog* stat_dlg = new Statistic_Dialog(this, saled_tab.count(), rented_tab.count(), sale_tab.count(), rent_tab.count(), client_tab.count());
+    if (stat_dlg->exec() == QDialog::Accepted)
+        delete stat_dlg;
+    else
+        delete stat_dlg;
+}
+
+void MainWindow::on_btn_clients_clicked()
+{
+    Clients_Dialog* clients_dlg = new Clients_Dialog(this, client_tab);
+    if (clients_dlg->exec() == QDialog::Accepted)
+        delete clients_dlg;
+    else
+        delete clients_dlg;
 }
