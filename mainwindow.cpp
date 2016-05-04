@@ -417,6 +417,8 @@ void MainWindow::UpdateTab() {
     int i;
     saled_tab.clear();
     rented_tab.clear();
+    sale_tab.clear();
+    rent_tab.clear();
     for (i = 0; i < advert_tab.count(); ++i) {
         if (advert_tab[i]->GetIsSaleRent() == 0) {
             if (advert_tab[i]->GetIdClient() != -1) {
@@ -527,8 +529,8 @@ void MainWindow::on_btn_search_clicked()
 
         QList<Advert*> working_tab;
         search_tab.clear();
+        UpdateTab();
 
-        QMessageBox msg;
 
         if (isSale && !isRent)
             working_tab = sale_tab;
@@ -849,7 +851,6 @@ void MainWindow::on_le_size_max_textEdited(const QString &arg1)
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
     if (isInSearch) {
-        QMessageBox msg;
         int i;
         int indexClient = 0;
         bool findClient = false;
@@ -861,56 +862,53 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
             }
         }
         if (findClient) {
-            msg.setText("Index client trouvée: "+QString::number(indexClient) + "id " +QString::number(client_tab[indexClient]->GetId()));
-            msg.exec();
-           Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], search_tab[index.row()]);
-           if (advert_dlg->exec() == QDialog::Accepted){
-               search_tab[index.row()] = advert_dlg->GetAdvert();
-               UpdateTab();
-               if (advert_dlg->hasClient()) {
-                   if (!isKnownClient(advert_dlg->GetClient())) {
-                       client = advert_dlg->GetClient();
-                       client->SetId(new_client_id);
-                       client_tab.append(client);
-                       search_tab[index.row()]->SetIdClient(client->GetId());
-                       new_client_id++;
-                   } else {
-                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
-                       search_tab[index.row()]->SetIdClient(client->GetId());
-                   }
-               } else {
-                   search_tab[index.row()]->SetIdClient(-1);
-               }
-               UpdateTab();
-               FillAllAdvert(search_tab);
-           }
-           delete advert_dlg;
+            Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], search_tab[index.row()]);
+            if (advert_dlg->exec() == QDialog::Accepted){
+                search_tab[index.row()] = advert_dlg->GetAdvert();
+                UpdateTab();
+                if (advert_dlg->hasClient()) {
+                    if (!isKnownClient(advert_dlg->GetClient())) {
+                        client = advert_dlg->GetClient();
+                        client->SetId(new_client_id);
+                        client_tab.append(client);
+                        search_tab[index.row()]->SetIdClient(client->GetId());
+                        new_client_id++;
+                    } else {
+                        client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                        search_tab[index.row()]->SetIdClient(client->GetId());
+                    }
+                } else {
+                    search_tab[index.row()]->SetIdClient(-1);
+                }
+                UpdateTab();
+                FillAllAdvert(search_tab);
+            }
+            delete advert_dlg;
         } else {
-           Advert_Dialog *advert_dlg = new Advert_Dialog(this, search_tab[index.row()]);
-           if (advert_dlg->exec() == QDialog::Accepted){
-               search_tab[index.row()] = advert_dlg->GetAdvert();
-               UpdateTab();
-               if (advert_dlg->hasClient()) {
-                   if (!isKnownClient(advert_dlg->GetClient())) {
-                       client = advert_dlg->GetClient();
-                       client->SetId(new_client_id);
-                       client_tab.append(client);
-                       search_tab[index.row()]->SetIdClient(client->GetId());
-                       new_client_id++;
-                   } else {
-                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
-                       search_tab[index.row()]->SetIdClient(client->GetId());
-                   }
-               } else {
-                   search_tab[index.row()]->SetIdClient(-1);
-               }
-               UpdateTab();
-               FillAllAdvert(search_tab);
-           }
-           delete advert_dlg;
+            Advert_Dialog *advert_dlg = new Advert_Dialog(this, search_tab[index.row()]);
+            if (advert_dlg->exec() == QDialog::Accepted){
+                search_tab[index.row()] = advert_dlg->GetAdvert();
+                UpdateTab();
+                if (advert_dlg->hasClient()) {
+                    if (!isKnownClient(advert_dlg->GetClient())) {
+                        client = advert_dlg->GetClient();
+                        client->SetId(new_client_id);
+                        client_tab.append(client);
+                        search_tab[index.row()]->SetIdClient(client->GetId());
+                        new_client_id++;
+                    } else {
+                        client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                        search_tab[index.row()]->SetIdClient(client->GetId());
+                    }
+                } else {
+                    search_tab[index.row()]->SetIdClient(-1);
+                }
+                UpdateTab();
+                FillAllAdvert(search_tab);
+            }
+            delete advert_dlg;
         }
     } else {
-        QMessageBox msg;
         int i;
         int indexClient = 0;
         bool findClient = false;
@@ -922,53 +920,51 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
             }
         }
         if (findClient) {
-            msg.setText("Index client trouvée: "+QString::number(indexClient) + "id " +QString::number(client_tab[indexClient]->GetId()));
-            msg.exec();
-           Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], advert_tab[index.row()]);
-           if (advert_dlg->exec() == QDialog::Accepted){
-               advert_tab[index.row()] = advert_dlg->GetAdvert();
-               UpdateTab();
-               if (advert_dlg->hasClient()) {
-                   if (!isKnownClient(advert_dlg->GetClient())) {
-                       client = advert_dlg->GetClient();
-                       client->SetId(new_client_id);
-                       client_tab.append(client);
-                       advert_tab[index.row()]->SetIdClient(client->GetId());
-                       new_client_id++;
-                   } else {
-                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
-                       advert_tab[index.row()]->SetIdClient(client->GetId());
-                   }
-               } else {
-                   advert_tab[index.row()]->SetIdClient(-1);
-               }
-               UpdateTab();
-               FillAllAdvert(advert_tab);
-           }
-           delete advert_dlg;
+            Advert_Dialog *advert_dlg = new Advert_Dialog(this, client_tab[indexClient], advert_tab[index.row()]);
+            if (advert_dlg->exec() == QDialog::Accepted){
+                advert_tab[index.row()] = advert_dlg->GetAdvert();
+                UpdateTab();
+                if (advert_dlg->hasClient()) {
+                    if (!isKnownClient(advert_dlg->GetClient())) {
+                        client = advert_dlg->GetClient();
+                        client->SetId(new_client_id);
+                        client_tab.append(client);
+                        advert_tab[index.row()]->SetIdClient(client->GetId());
+                        new_client_id++;
+                    } else {
+                        client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                        advert_tab[index.row()]->SetIdClient(client->GetId());
+                    }
+                } else {
+                    advert_tab[index.row()]->SetIdClient(-1);
+                }
+                UpdateTab();
+                FillAllAdvert(advert_tab);
+            }
+            delete advert_dlg;
         } else {
-           Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
-           if (advert_dlg->exec() == QDialog::Accepted){
-               advert_tab[index.row()] = advert_dlg->GetAdvert();
-               UpdateTab();
-               if (advert_dlg->hasClient()) {
-                   if (!isKnownClient(advert_dlg->GetClient())) {
-                       client = advert_dlg->GetClient();
-                       client->SetId(new_client_id);
-                       client_tab.append(client);
-                       advert_tab[index.row()]->SetIdClient(client->GetId());
-                       new_client_id++;
-                   } else {
-                       client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
-                       advert_tab[index.row()]->SetIdClient(client->GetId());
-                   }
-               } else {
-                   advert_tab[index.row()]->SetIdClient(-1);
-               }
-               UpdateTab();
-               FillAllAdvert(advert_tab);
-           }
-           delete advert_dlg;
+            Advert_Dialog *advert_dlg = new Advert_Dialog(this, advert_tab[index.row()]);
+            if (advert_dlg->exec() == QDialog::Accepted){
+                advert_tab[index.row()] = advert_dlg->GetAdvert();
+                UpdateTab();
+                if (advert_dlg->hasClient()) {
+                    if (!isKnownClient(advert_dlg->GetClient())) {
+                        client = advert_dlg->GetClient();
+                        client->SetId(new_client_id);
+                        client_tab.append(client);
+                        advert_tab[index.row()]->SetIdClient(client->GetId());
+                        new_client_id++;
+                    } else {
+                        client = client_tab[GetIndexClient(advert_dlg->GetAdvert()->GetId())];
+                        advert_tab[index.row()]->SetIdClient(client->GetId());
+                    }
+                } else {
+                    advert_tab[index.row()]->SetIdClient(-1);
+                }
+                UpdateTab();
+                FillAllAdvert(advert_tab);
+            }
+            delete advert_dlg;
         }
     }
 
@@ -982,11 +978,12 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
 void MainWindow::on_btn_suppress_add_clicked()
 {
     QModelIndexList rowToSuppress = ui->tableView->selectionModel()->selectedRows();
-        int max = rowToSuppress.count();
-        for (int i = 0; i < max ; i++){
-            advert_tab.removeAt(rowToSuppress.at(i).row());
-        }
-        FillAllAdvert(advert_tab);
+    int max = rowToSuppress.count();
+    for (int i = 0; i < max ; i++){
+        advert_tab.removeAt(rowToSuppress.at(i).row());
+    }
+    UpdateTab();
+    FillAllAdvert(advert_tab);
 }
 
 void MainWindow::on_btn_statistic_clicked()
